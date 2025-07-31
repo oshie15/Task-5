@@ -1,6 +1,6 @@
 [build]
   publish = "client/build"
-  command = "npm install && cd client && npm install && cd ../netlify/functions && npm install && cd ../../client && npm run build"
+  command = "npm install && cd client && npm install && cd ../../client && npm run build"
 
 [[redirects]]
   from = "/api/*"
@@ -8,7 +8,4 @@
   status = 200
 
 [build.environment]
-  NODE_VERSION = "18"
-
-[[plugins]]
-  package = "@netlify/plugin-functions-install-core" 
+  NODE_VERSION = "18" 
