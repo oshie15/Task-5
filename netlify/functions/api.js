@@ -1,5 +1,5 @@
-const { generateBooks } = require('../../server/bookGenerator');
-const { exportToCSV } = require('../../server/csvExporter');
+const { generateBooks } = require('./bookGenerator');
+const { exportToCSV } = require('./csvExporter');
 
 exports.handler = async (event, context) => {
     // Enable CORS
@@ -19,10 +19,13 @@ exports.handler = async (event, context) => {
     }
 
     try {
+        console.log('Function called with path:', event.path);
         const path = event.path.replace('/.netlify/functions/api', '');
+        console.log('Processed path:', path);
 
         if (path === '/books') {
             const { page = 1, limit = 20, seed = 42, region = 'en-US', avgLikes = 5, avgReviews = 4.7 } = event.queryStringParameters || {};
+            console.log('Books API called with params:', { page, limit, seed, region, avgLikes, avgReviews });
 
             const books = generateBooks({
                 page: parseInt(page),
@@ -32,6 +35,7 @@ exports.handler = async (event, context) => {
                 avgLikes: parseFloat(avgLikes),
                 avgReviews: parseFloat(avgReviews)
             });
+            console.log('Generated books count:', books.length);
 
             return {
                 statusCode: 200,
