@@ -39,7 +39,7 @@ const App = () => {
                 }
             });
 
-            const newBooks = response.data.books;
+            const newBooks = response.data;
 
             if (append) {
                 setBooks(prev => [...prev, ...newBooks]);
@@ -48,7 +48,9 @@ const App = () => {
                 setExpandedRows(new Set());
             }
 
-            setHasMore(response.data.hasMore);
+            // For infinite scrolling, assume there are more books if we got the requested amount
+            const requestedLimit = page === 1 ? 20 : 10;
+            setHasMore(newBooks.length === requestedLimit);
             setCurrentPage(page);
         } catch (error) {
             console.error('Error fetching books:', error);
