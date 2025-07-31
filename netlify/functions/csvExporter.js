@@ -1,42 +1,33 @@
-const createCsvWriter = require('csv-writer').createObjectCsvWriter;
+const { generateBooks } = require('./bookGenerator');
 
-function exportToCSV(books) {
-    const csvWriter = createCsvWriter({
-        path: 'temp.csv',
-        header: [
-            { id: 'index', title: 'Index' },
-            { id: 'isbn', title: 'ISBN' },
-            { id: 'title', title: 'Title' },
-            { id: 'author', title: 'Author(s)' },
-            { id: 'publisher', title: 'Publisher' },
-            { id: 'likes', title: 'Likes' },
-            { id: 'reviewCount', title: 'Review Count' }
-        ]
-    });
+async function exportToCSV({ seed, region, avgLikes, avgReviews, pages }) {
+    // Generate books for all pages
+    let allBooks = [];
+    for (let page = 1; page <= pages; page++) {
+        const books = generateBooks({
+            page,
+            limit: 20,
+            seed,
+            region,
+            avgLikes,
+            avgReviews
+        });
+        allBooks = allBooks.concat(books);
+    }
 
-    const csvData = books.map(book => ({
-        index: book.index,
-        isbn: book.isbn,
-        title: book.title,
-        author: book.author,
-        publisher: book.publisher,
-        likes: book.likes,
-        reviewCount: book.reviews.length
-    }));
-
-    // Convert to CSV string manually since we need to return it
+    // Convert to CSV string
     const headers = ['Index', 'ISBN', 'Title', 'Author(s)', 'Publisher', 'Likes', 'Review Count'];
     const csvRows = [headers.join(',')];
 
-    csvData.forEach(row => {
+    allBooks.forEach(book => {
         const values = [
-            row.index,
-            `"${row.isbn}"`,
-            `"${row.title}"`,
-            `"${row.author}"`,
-            `"${row.publisher}"`,
-            row.likes,
-            row.reviewCount
+            book.index,
+            `"${book.isbn}"`,
+            `"${book.title.replace(/"/g, '""')}"`, // Escape quotes in titles
+            `"${book.author.replace(/"/g, '""')}"`, // Escape quotes in authors
+            `"${book.publisher.replace(/"/g, '""')}"`, // Escape quotes in publishers
+            book.likes,
+            book.reviews.length
         ];
         csvRows.push(values.join(','));
     });
