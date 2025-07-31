@@ -28,7 +28,7 @@ const App = () => {
         setLoading(true);
         try {
 
-            const response = await axios.get('/api/books', {
+            const response = await axios.get('/.netlify/functions/api/books', {
                 params: {
                     page,
                     limit: page === 1 ? 20 : 10,
@@ -97,7 +97,7 @@ const App = () => {
 
     const exportToCSV = async () => {
         try {
-            const response = await axios.get('/api/export-csv', {
+            const response = await axios.get('/.netlify/functions/api/export-csv', {
                 params: {
                     pages: Math.ceil(books.length / 20),
                     seed,
