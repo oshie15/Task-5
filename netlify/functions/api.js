@@ -1,4 +1,4 @@
-// const { generateBooks } = require('./bookGenerator');
+const { generateBooks } = require('./bookGenerator');
 const { exportToCSV } = require('./csvExporter');
 
 exports.handler = async (event, context) => {
@@ -27,54 +27,28 @@ exports.handler = async (event, context) => {
             const { page = 1, limit = 20, seed = 42, region = 'en-US', avgLikes = 5, avgReviews = 4.7 } = event.queryStringParameters || {};
             console.log('Books API called with params:', { page, limit, seed, region, avgLikes, avgReviews });
 
-            // Simple book generation without external dependencies
-            const books = [];
-            const startIndex = page === 1 ? 1 : 20 + (page - 2) * 10 + 1;
-
-            for (let i = 0; i < parseInt(limit); i++) {
-                const bookIndex = startIndex + i;
-                
-                // Simple language-specific content
-                const names = {
-                    'en-US': ['John Smith', 'Emma Johnson', 'Michael Brown', 'Sarah Davis', 'David Wilson'],
-                    'de-DE': ['Hans Müller', 'Anna Schmidt', 'Klaus Weber', 'Maria Fischer', 'Peter Meyer'],
-                    'fr-FR': ['Jean Dupont', 'Marie Martin', 'Pierre Durand', 'Sophie Bernard', 'Michel Petit'],
-                    'ja-JP': ['田中太郎', '佐藤花子', '鈴木一郎', '高橋美咲', '渡辺健太']
-                };
-                
-                const titles = {
-                    'en-US': ['The Great Adventure', 'Mystery of the Night', 'Journey to Success', 'Hidden Treasures', 'The Last Hope'],
-                    'de-DE': ['Das Große Abenteuer', 'Geheimnis der Nacht', 'Reise zum Erfolg', 'Verborgene Schätze', 'Die Letzte Hoffnung'],
-                    'fr-FR': ['La Grande Aventure', 'Mystère de la Nuit', 'Voyage vers le Succès', 'Trésors Cachés', 'Le Dernier Espoir'],
-                    'ja-JP': ['素晴らしい冒険', '夜の謎', '成功への旅', '隠された宝物', '最後の希望']
-                };
-                
-                const regionNames = names[region] || names['en-US'];
-                const regionTitles = titles[region] || titles['en-US'];
-                
-                books.push({
-                    index: bookIndex,
-                    isbn: `978-${Math.floor(Math.random() * 10)}-${Math.floor(Math.random() * 100000).toString().padStart(5, '0')}-${Math.floor(Math.random() * 10000).toString().padStart(4, '0')}-${Math.floor(Math.random() * 10)}`,
-                    title: regionTitles[Math.floor(Math.random() * regionTitles.length)],
-                    author: regionNames[Math.floor(Math.random() * regionNames.length)],
-                    publisher: `Publisher ${bookIndex}, ${1990 + Math.floor(Math.random() * 34)}`,
-                    likes: Math.floor(Math.random() * 10),
-                    reviews: [
-                        {
-                            text: `Great book ${bookIndex}!`,
-                            author: `Reviewer ${bookIndex}`,
-                            company: `Company ${bookIndex}`
-                        }
-                    ],
-                    cover: {
-                        color: ['#FF6B6B', '#4ECDC4', '#45B7D1', '#96CEB4', '#FFEAA7'][Math.floor(Math.random() * 5)],
-                        title: regionTitles[Math.floor(Math.random() * regionTitles.length)],
-                        author: regionNames[Math.floor(Math.random() * regionNames.length)]
-                    }
+            try {
+                const books = generateBooks({
+                    page: parseInt(page),
+                    limit: parseInt(limit),
+                    seed: parseInt(seed),
+                    region,
+                    avgLikes: parseFloat(avgLikes),
+                    avgReviews: parseFloat(avgReviews)
                 });
+                console.log('Generated books count:', books.length);
+                console.log('First book sample:', books[0] ? JSON.stringify(books[0]) : 'No books generated');
+            } catch (error) {
+                console.error('Error generating books:', error);
+                return {
+                    statusCode: 500,
+                    headers: {
+                        ...headers,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ error: 'Failed to generate books', details: error.message })
+                };
             }
-            
-            console.log('Generated books count:', books.length);
 
             return {
                 statusCode: 200,

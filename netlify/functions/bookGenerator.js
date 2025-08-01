@@ -1,35 +1,23 @@
-const { faker } = require('@faker-js/faker');
+const Chance = require('chance');
 const seedrandom = require('seedrandom');
 
-// Language-specific data directly in the generator
+// Language-specific data for Chance.js
 const LANGUAGES = {
     'en-US': {
         name: 'English',
-        locale: 'en-US',
-        reviewTemplates: Array.from({ length: 5 }, () => (faker) => faker.lorem.sentence()),
-        titlePatterns: Array.from({ length: 5 }, () => (faker) => faker.lorem.words({ min: 2, max: 4 })),
-        publisherSuffixes: (faker) => Array.from({ length: 6 }, () => faker.lorem.word() + ' ' + faker.lorem.word())
+        locale: 'en_US'
     },
     'de-DE': {
         name: 'Deutsch',
-        locale: 'de-DE',
-        reviewTemplates: Array.from({ length: 5 }, () => (faker) => faker.lorem.sentence()),
-        titlePatterns: Array.from({ length: 5 }, () => (faker) => faker.lorem.words({ min: 2, max: 4 })),
-        publisherSuffixes: (faker) => Array.from({ length: 6 }, () => faker.lorem.word() + ' ' + faker.lorem.word())
+        locale: 'de_DE'
     },
     'fr-FR': {
         name: 'Français',
-        locale: 'fr-FR',
-        reviewTemplates: Array.from({ length: 5 }, () => (faker) => faker.lorem.sentence()),
-        titlePatterns: Array.from({ length: 5 }, () => (faker) => faker.lorem.words({ min: 2, max: 4 })),
-        publisherSuffixes: (faker) => Array.from({ length: 6 }, () => faker.lorem.word() + ' ' + faker.lorem.word())
+        locale: 'fr_FR'
     },
     'ja-JP': {
         name: '日本語',
-        locale: 'ja-JP',
-        reviewTemplates: Array.from({ length: 5 }, () => (faker) => faker.lorem.sentence()),
-        titlePatterns: Array.from({ length: 5 }, () => (faker) => faker.lorem.words({ min: 2, max: 4 })),
-        publisherSuffixes: (faker) => Array.from({ length: 6 }, () => faker.lorem.word() + ' ' + faker.lorem.word())
+        locale: 'ja'
     }
 };
 
@@ -40,55 +28,30 @@ function getLanguageConfig(region = 'en-US') {
 
 // Function to generate dynamic reviews using Faker
 function generateReviewText(rng, region = 'en-US') {
-    // Generate review text based on region
-    const reviews = {
-        'en-US': ['Excellent book!', 'Highly recommended!', 'A must-read!', 'Outstanding quality!', 'Wonderful story!'],
-        'de-DE': ['Ausgezeichnetes Buch!', 'Sehr empfehlenswert!', 'Ein Muss!', 'Hervorragende Qualität!', 'Wundervolle Geschichte!'],
-        'fr-FR': ['Excellent livre!', 'Très recommandé!', 'Un must!', 'Qualité exceptionnelle!', 'Histoire merveilleuse!'],
-        'ja-JP': ['素晴らしい本です！', 'とてもおすすめです！', '必読です！', '素晴らしい品質です！', '素晴らしい物語です！']
-    };
-
-    const regionReviews = reviews[region] || reviews['en-US'];
-    return regionReviews[Math.floor(rng() * regionReviews.length)];
+    const langConfig = getLanguageConfig(region);
+    const chance = new Chance(rng);
+    return chance.sentence();
 }
 
 function generateAuthorName(rng, region = 'en-US') {
-    // Generate names based on region
-    const names = {
-        'en-US': ['John Smith', 'Emma Johnson', 'Michael Brown', 'Sarah Davis', 'David Wilson'],
-        'de-DE': ['Hans Müller', 'Anna Schmidt', 'Klaus Weber', 'Maria Fischer', 'Peter Meyer'],
-        'fr-FR': ['Jean Dupont', 'Marie Martin', 'Pierre Durand', 'Sophie Bernard', 'Michel Petit'],
-        'ja-JP': ['田中太郎', '佐藤花子', '鈴木一郎', '高橋美咲', '渡辺健太']
-    };
-
-    const regionNames = names[region] || names['en-US'];
-    return regionNames[Math.floor(rng() * regionNames.length)];
+    const langConfig = getLanguageConfig(region);
+    const chance = new Chance(rng);
+    return `${chance.first()} ${chance.last()}`;
 }
 
 function generatePublisherName(rng, region = 'en-US') {
-    // Generate publisher names based on region
-    const publishers = {
-        'en-US': ['Random House', 'Penguin Books', 'HarperCollins', 'Simon & Schuster', 'Macmillan'],
-        'de-DE': ['Random House', 'Penguin Verlag', 'HarperCollins', 'Simon & Schuster', 'Macmillan'],
-        'fr-FR': ['Random House', 'Penguin Livres', 'HarperCollins', 'Simon & Schuster', 'Macmillan'],
-        'ja-JP': ['ランダムハウス', 'ペンギンブックス', 'ハーパーコリンズ', 'サイモン&シュスター', 'マクミラン']
-    };
-
-    const regionPublishers = publishers[region] || publishers['en-US'];
-    return regionPublishers[Math.floor(rng() * regionPublishers.length)];
+    const langConfig = getLanguageConfig(region);
+    const chance = new Chance(rng);
+    return `${chance.company()} Publishing`;
 }
 
 function generateBookTitle(rng, region = 'en-US') {
-    // Generate titles based on region
-    const titles = {
-        'en-US': ['The Great Adventure', 'Mystery of the Night', 'Journey to Success', 'Hidden Treasures', 'The Last Hope'],
-        'de-DE': ['Das Große Abenteuer', 'Geheimnis der Nacht', 'Reise zum Erfolg', 'Verborgene Schätze', 'Die Letzte Hoffnung'],
-        'fr-FR': ['La Grande Aventure', 'Mystère de la Nuit', 'Voyage vers le Succès', 'Trésors Cachés', 'Le Dernier Espoir'],
-        'ja-JP': ['素晴らしい冒険', '夜の謎', '成功への旅', '隠された宝物', '最後の希望']
-    };
-
-    const regionTitles = titles[region] || titles['en-US'];
-    return regionTitles[Math.floor(rng() * regionTitles.length)];
+    const langConfig = getLanguageConfig(region);
+    const chance = new Chance(rng);
+    const title = chance.sentence({ words: chance.integer({ min: 3, max: 6 }) });
+    
+    // Capitalize first letter of each word for proper title case
+    return title.split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
 }
 
 function generateBooks({ page, limit, seed, region, avgLikes, avgReviews }) {
