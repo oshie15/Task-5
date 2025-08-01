@@ -1,14 +1,14 @@
 {
-  "name": "bookstore-api-functions",
-  "version": "1.0.0",
-  "description": "Netlify Functions for Bookstore API",
-  "main": "api.js",
-  "dependencies": {
-    "chance": "^1.1.11",
-    "csv-writer": "^1.6.0",
-    "seedrandom": "^3.0.5"
-  },
-  "engines": {
-    "node": ">=18.0.0"
-  }
-} 
+	"name": "bookstore-api-functions",
+	"version": "1.0.0",
+	"description": "Netlify Functions for Bookstore API",
+	"main": "api.js",
+	"dependencies": {
+		"csv-writer": "^1.6.0",
+		"seedrandom": "^3.0.5",
+		"faker": "^6.6.6"
+	},
+	"engines": {
+		"node": ">=18.0.0"
+	}
+}

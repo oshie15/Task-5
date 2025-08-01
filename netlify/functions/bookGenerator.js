@@ -1,81 +1,93 @@
-const Chance = require('chance');
+const faker = require('faker');
 const seedrandom = require('seedrandom');
 
-// Language-specific data with proper locale mappings
-const LANGUAGES = {
-    'en-US': {
-        name: 'English',
-        locale: 'en_US',
-        names: ['John Smith', 'Emma Johnson', 'Michael Brown', 'Sarah Davis', 'David Wilson', 'Lisa Anderson', 'Robert Taylor', 'Jennifer White'],
-        titles: ['The Great Adventure', 'Mystery of the Night', 'Journey to Success', 'Hidden Treasures', 'The Last Hope', 'Beyond the Horizon', 'Secrets of Time', 'The Lost Kingdom'],
-        reviews: ['Excellent book!', 'Highly recommended!', 'A must-read!', 'Outstanding quality!', 'Wonderful story!', 'Amazing content!', 'Fantastic writing!', 'Brilliant narrative!'],
-        publishers: ['Random House', 'Penguin Books', 'HarperCollins', 'Simon & Schuster', 'Macmillan', 'Scholastic', 'Bloomsbury', 'Hachette']
-    },
-    'de-DE': {
-        name: 'Deutsch',
-        locale: 'de_DE',
-        names: ['Hans Müller', 'Anna Schmidt', 'Klaus Weber', 'Maria Fischer', 'Peter Meyer', 'Sabine Wagner', 'Thomas Schulz', 'Monika Hoffmann'],
-        titles: ['Das Große Abenteuer', 'Geheimnis der Nacht', 'Reise zum Erfolg', 'Verborgene Schätze', 'Die Letzte Hoffnung', 'Jenseits des Horizonts', 'Geheimnisse der Zeit', 'Das Verlorene Königreich'],
-        reviews: ['Ausgezeichnetes Buch!', 'Sehr empfehlenswert!', 'Ein Muss!', 'Hervorragende Qualität!', 'Wundervolle Geschichte!', 'Erstaunlicher Inhalt!', 'Fantastisches Schreiben!', 'Brillante Erzählung!'],
-        publishers: ['Random House', 'Penguin Verlag', 'HarperCollins', 'Simon & Schuster', 'Macmillan', 'Scholastic', 'Bloomsbury', 'Hachette']
-    },
-    'fr-FR': {
-        name: 'Français',
-        locale: 'fr_FR',
-        names: ['Jean Dupont', 'Marie Martin', 'Pierre Durand', 'Sophie Bernard', 'Michel Petit', 'Isabelle Moreau', 'François Dubois', 'Catherine Leroy'],
-        titles: ['La Grande Aventure', 'Mystère de la Nuit', 'Voyage vers le Succès', 'Trésors Cachés', 'Le Dernier Espoir', 'Au-delà de l\'Horizon', 'Secrets du Temps', 'Le Royaume Perdu'],
-        reviews: ['Excellent livre!', 'Très recommandé!', 'Un must!', 'Qualité exceptionnelle!', 'Histoire merveilleuse!', 'Contenu incroyable!', 'Écriture fantastique!', 'Narration brillante!'],
-        publishers: ['Random House', 'Penguin Livres', 'HarperCollins', 'Simon & Schuster', 'Macmillan', 'Scholastic', 'Bloomsbury', 'Hachette']
-    },
-    'ja-JP': {
-        name: '日本語',
-        locale: 'ja',
-        names: ['田中太郎', '佐藤花子', '鈴木一郎', '高橋美咲', '渡辺健太', '伊藤恵子', '山田次郎', '中村雅子'],
-        titles: ['素晴らしい冒険', '夜の謎', '成功への旅', '隠された宝物', '最後の希望', '地平線の向こう', '時の秘密', '失われた王国'],
-        reviews: ['素晴らしい本です！', 'とてもおすすめです！', '必読です！', '素晴らしい品質です！', '素晴らしい物語です！', '驚くべき内容です！', '素晴らしい文章です！', '素晴らしい物語です！'],
-        publishers: ['ランダムハウス', 'ペンギンブックス', 'ハーパーコリンズ', 'サイモン&シュスター', 'マクミラン', 'スコラスティック', 'ブルームズベリー', 'アシェット']
-    }
+// Large lookup tables for realistic data generation
+const FIRST_NAMES = {
+    'en-US': ['James', 'Mary', 'John', 'Patricia', 'Robert', 'Jennifer', 'Michael', 'Linda', 'William', 'Elizabeth', 'David', 'Barbara', 'Richard', 'Susan', 'Joseph', 'Jessica', 'Thomas', 'Sarah', 'Christopher', 'Karen'],
+    'de-DE': ['Hans', 'Anna', 'Klaus', 'Maria', 'Peter', 'Sabine', 'Thomas', 'Monika', 'Michael', 'Petra', 'Wolfgang', 'Susanne', 'Dieter', 'Renate', 'Manfred', 'Ursula', 'Werner', 'Elke', 'Helmut', 'Brigitte'],
+    'fr-FR': ['Jean', 'Marie', 'Pierre', 'Françoise', 'Michel', 'Monique', 'André', 'Nathalie', 'Philippe', 'Isabelle', 'Claude', 'Sylvie', 'Jacques', 'Martine', 'Daniel', 'Catherine', 'Bernard', 'Francine', 'Robert', 'Nicole'],
+    'ja-JP': ['田中', '佐藤', '鈴木', '高橋', '渡辺', '伊藤', '山田', '中村', '小林', '加藤', '吉田', '山本', '佐々木', '山口', '松本', '井上', '木村', '林', '斎藤', '清水']
 };
 
-// Helper function to get language configuration
-function getLanguageConfig(region = 'en-US') {
-    return LANGUAGES[region] || LANGUAGES['en-US'];
-}
+const LAST_NAMES = {
+    'en-US': ['Smith', 'Johnson', 'Williams', 'Brown', 'Jones', 'Garcia', 'Miller', 'Davis', 'Rodriguez', 'Martinez', 'Hernandez', 'Lopez', 'Gonzalez', 'Wilson', 'Anderson', 'Thomas', 'Taylor', 'Moore', 'Jackson', 'Martin'],
+    'de-DE': ['Müller', 'Schmidt', 'Schneider', 'Fischer', 'Weber', 'Meyer', 'Wagner', 'Becker', 'Schulz', 'Hoffmann', 'Schäfer', 'Koch', 'Bauer', 'Richter', 'Klein', 'Wolf', 'Schröder', 'Neumann', 'Schwarz', 'Zimmermann'],
+    'fr-FR': ['Martin', 'Bernard', 'Dubois', 'Thomas', 'Robert', 'Richard', 'Petit', 'Durand', 'Leroy', 'Moreau', 'Simon', 'Laurent', 'Lefebvre', 'Michel', 'Garcia', 'David', 'Bertrand', 'Roux', 'Vincent', 'Fournier'],
+    'ja-JP': ['佐藤', '鈴木', '高橋', '田中', '渡辺', '伊藤', '山田', '中村', '小林', '加藤', '吉田', '山本', '佐々木', '山口', '松本', '井上', '木村', '林', '斎藤', '清水']
+};
 
-// Generic function to get random item from array using seeded random
+const BOOK_TITLES = {
+    'en-US': ['The Silent Echo', 'Beyond the Horizon', 'Whispers of Time', 'The Last Guardian', 'Echoes of Yesterday', 'The Hidden Truth', 'Shadows of the Past', 'The Golden Path', 'Mystery of the Deep', 'The Lost Kingdom', 'Tales of Wonder', 'The Secret Garden', 'Beyond the Stars', 'The Ancient Code', 'Whispers in the Wind'],
+    'de-DE': ['Das Schweigen der Nacht', 'Jenseits des Horizonts', 'Flüster der Zeit', 'Der Letzte Wächter', 'Echos von Gestern', 'Die Versteckte Wahrheit', 'Schatten der Vergangenheit', 'Der Goldene Pfad', 'Geheimnis der Tiefe', 'Das Verlorene Königreich', 'Geschichten des Wunders', 'Der Geheime Garten', 'Jenseits der Sterne', 'Der Alte Code', 'Flüster im Wind'],
+    'fr-FR': ['L\'Écho Silencieux', 'Au-delà de l\'Horizon', 'Murmures du Temps', 'Le Dernier Gardien', 'Échos d\'Hier', 'La Vérité Cachée', 'Ombres du Passé', 'Le Chemin Doré', 'Mystère des Profondeurs', 'Le Royaume Perdu', 'Contes de Merveilles', 'Le Jardin Secret', 'Au-delà des Étoiles', 'L\'Ancien Code', 'Murmures dans le Vent'],
+    'ja-JP': ['静寂のエコー', '地平線の向こう', '時のささやき', '最後の守護者', '昨日のエコー', '隠された真実', '過去の影', '黄金の道', '深淵の謎', '失われた王国', '驚異の物語', '秘密の庭', '星の向こう', '古代の暗号', '風のささやき']
+};
+
+const PUBLISHERS = {
+    'en-US': ['Random House', 'Penguin Books', 'HarperCollins', 'Simon & Schuster', 'Macmillan', 'Scholastic', 'Bloomsbury', 'Hachette', 'Wiley', 'Oxford University Press'],
+    'de-DE': ['Random House', 'Penguin Verlag', 'HarperCollins', 'Simon & Schuster', 'Macmillan', 'Scholastic', 'Bloomsbury', 'Hachette', 'Wiley', 'Oxford University Press'],
+    'fr-FR': ['Random House', 'Penguin Livres', 'HarperCollins', 'Simon & Schuster', 'Macmillan', 'Scholastic', 'Bloomsbury', 'Hachette', 'Wiley', 'Oxford University Press'],
+    'ja-JP': ['ランダムハウス', 'ペンギンブックス', 'ハーパーコリンズ', 'サイモン&シュスター', 'マクミラン', 'スコラスティック', 'ブルームズベリー', 'アシェット', 'ワイリー', 'オックスフォード大学出版局']
+};
+
+// Helper function to get random item from array using seeded random
 function getRandomItem(array, rng) {
     return array[Math.floor(rng() * array.length)];
 }
 
 // Function to generate author name using language-specific data
 function generateAuthorName(rng, region = 'en-US') {
-    const langConfig = getLanguageConfig(region);
-    return getRandomItem(langConfig.names, rng);
+    const firstNames = FIRST_NAMES[region] || FIRST_NAMES['en-US'];
+    const lastNames = LAST_NAMES[region] || LAST_NAMES['en-US'];
+    
+    const firstName = getRandomItem(firstNames, rng);
+    const lastName = getRandomItem(lastNames, rng);
+    
+    return `${firstName} ${lastName}`;
 }
 
 // Function to generate book title using language-specific data
 function generateBookTitle(rng, region = 'en-US') {
-    const langConfig = getLanguageConfig(region);
-    return getRandomItem(langConfig.titles, rng);
-}
-
-// Function to generate review text using language-specific data
-function generateReviewText(rng, region = 'en-US') {
-    const langConfig = getLanguageConfig(region);
-    return getRandomItem(langConfig.reviews, rng);
+    const titles = BOOK_TITLES[region] || BOOK_TITLES['en-US'];
+    return getRandomItem(titles, rng);
 }
 
 // Function to generate publisher name using language-specific data
 function generatePublisherName(rng, region = 'en-US') {
-    const langConfig = getLanguageConfig(region);
-    return getRandomItem(langConfig.publishers, rng);
+    const publishers = PUBLISHERS[region] || PUBLISHERS['en-US'];
+    return getRandomItem(publishers, rng);
 }
 
+// Function to generate review text
+function generateReviewText(rng, region = 'en-US') {
+    const reviews = {
+        'en-US': ['Excellent book! Highly recommended.', 'A masterpiece that will stand the test of time.', 'Outstanding quality and engaging narrative.', 'Wonderful story with compelling characters.', 'Amazing content that keeps you hooked.'],
+        'de-DE': ['Ausgezeichnetes Buch! Sehr empfehlenswert.', 'Ein Meisterwerk, das die Zeit überdauern wird.', 'Hervorragende Qualität und fesselnde Erzählung.', 'Wundervolle Geschichte mit überzeugenden Charakteren.', 'Erstaunlicher Inhalt, der einen fesselt.'],
+        'fr-FR': ['Excellent livre! Très recommandé.', 'Un chef-d\'œuvre qui résistera à l\'épreuve du temps.', 'Qualité exceptionnelle et narration engageante.', 'Histoire merveilleuse avec des personnages convaincants.', 'Contenu incroyable qui vous tient en haleine.'],
+        'ja-JP': ['素晴らしい本です！とてもおすすめです。', '時を超えて残る傑作です。', '素晴らしい品質と魅力的な物語です。', '魅力的なキャラクターを持つ素晴らしい物語です。', '最初から最後まで引き込まれる驚くべき内容です。']
+    };
+    
+    const regionReviews = reviews[region] || reviews['en-US'];
+    return getRandomItem(regionReviews, rng);
+}
+
+// Function to generate ISBN
+function generateISBN(rng) {
+    const prefix = '978';
+    const group = Math.floor(rng() * 10);
+    const publisher = Math.floor(rng() * 100000);
+    const title = Math.floor(rng() * 10000);
+    const checkDigit = Math.floor(rng() * 10);
+
+    return `${prefix}-${group}-${publisher.toString().padStart(5, '0')}-${title.toString().padStart(4, '0')}-${checkDigit}`;
+}
+
+// Main function to generate books with proper seeding
 function generateBooks({ page, limit, seed, region, avgLikes, avgReviews }) {
-    // Combine user seed with page number to ensure different pages have different data
-    // but same seed always produces same results
-    const combinedSeed = `${seed}_${page}`;
-    const rng = seedrandom(combinedSeed);
+    // Combine user seed with page number for deterministic but different data per page
+    // Using multiplication to ensure different pages have different data
+    const combinedSeed = parseInt(seed) * 1000 + parseInt(page);
+    const rng = seedrandom(combinedSeed.toString());
 
     // Ensure parameters are numbers
     const avgLikesNum = parseFloat(avgLikes);
@@ -88,10 +100,11 @@ function generateBooks({ page, limit, seed, region, avgLikes, avgReviews }) {
 
     for (let i = 0; i < limit; i++) {
         const bookIndex = startIndex + i;
-        const bookSeed = `${combinedSeed}_${bookIndex}`; // Unique seed for each book
-        const bookRng = seedrandom(bookSeed);
+        // Create unique seed for each book to ensure consistent data
+        const bookSeed = combinedSeed * 10000 + bookIndex;
+        const bookRng = seedrandom(bookSeed.toString());
 
-        // Generate book data using faker
+        // Generate book data - titles and authors depend only on seed and record number
         const title = generateBookTitle(bookRng, region);
         const author = generateAuthorName(bookRng, region);
         const publisher = generatePublisherName(bookRng, region);
@@ -107,11 +120,7 @@ function generateBooks({ page, limit, seed, region, avgLikes, avgReviews }) {
         } else if (avgLikesNum <= 1) {
             // For fractional values like 0.5, use probability logic
             const randomValue = bookRng();
-            if (randomValue < avgLikesNum) {
-                likes = 1;
-            } else {
-                likes = 0;
-            }
+            likes = randomValue < avgLikesNum ? 1 : 0;
         } else {
             // For values > 1, use normal distribution around the average
             likes = Math.floor(avgLikesNum + (bookRng() - 0.5) * 2);
@@ -124,15 +133,12 @@ function generateBooks({ page, limit, seed, region, avgLikes, avgReviews }) {
         } else if (avgReviewsNum <= 1) {
             // For fractional values like 0.5, use probability logic
             const randomValue = bookRng();
-            if (randomValue < avgReviewsNum) {
-                reviewCount = 1;
-            } else {
-                reviewCount = 0;
-            }
+            reviewCount = randomValue < avgReviewsNum ? 1 : 0;
         } else {
             // For values > 1, use normal distribution around the average
             reviewCount = Math.floor(avgReviewsNum + (bookRng() - 0.5) * 2);
         }
+        
         const bookReviews = [];
 
         for (let j = 0; j < reviewCount; j++) {
@@ -171,18 +177,6 @@ function generateBooks({ page, limit, seed, region, avgLikes, avgReviews }) {
     }
 
     return books;
-}
-
-function generateISBN(rng) {
-    const prefix = '978';
-    const group = Math.floor(rng() * 10);
-    const publisher = Math.floor(rng() * 100000);
-    const title = Math.floor(rng() * 10000);
-
-    // Calculate check digit (simplified)
-    const checkDigit = Math.floor(rng() * 10);
-
-    return `${prefix}-${group}-${publisher.toString().padStart(5, '0')}-${title.toString().padStart(4, '0')}-${checkDigit}`;
 }
 
 module.exports = { generateBooks }; 
