@@ -1,177 +1,80 @@
 const { faker } = require('@faker-js/faker');
 const seedrandom = require('seedrandom');
 
-// Language-specific data directly in the generator
-const LANGUAGES = {
-    'en-US': {
-        name: 'English',
-        locale: 'en-US',
-        reviewTemplates: Array.from({ length: 5 }, () => (faker) => faker.lorem.sentence()),
-        titlePatterns: Array.from({ length: 5 }, () => (faker) => faker.lorem.words({ min: 2, max: 4 })),
-        publisherSuffixes: (faker) => Array.from({ length: 6 }, () => faker.lorem.word() + ' ' + faker.lorem.word())
-    },
-    'de-DE': {
-        name: 'Deutsch',
-        locale: 'de-DE',
-        reviewTemplates: Array.from({ length: 5 }, () => (faker) => faker.lorem.sentence()),
-        titlePatterns: Array.from({ length: 5 }, () => (faker) => faker.lorem.words({ min: 2, max: 4 })),
-        publisherSuffixes: (faker) => Array.from({ length: 6 }, () => faker.lorem.word() + ' ' + faker.lorem.word())
-    },
-    'fr-FR': {
-        name: 'Français',
-        locale: 'fr-FR',
-        reviewTemplates: Array.from({ length: 5 }, () => (faker) => faker.lorem.sentence()),
-        titlePatterns: Array.from({ length: 5 }, () => (faker) => faker.lorem.words({ min: 2, max: 4 })),
-        publisherSuffixes: (faker) => Array.from({ length: 6 }, () => faker.lorem.word() + ' ' + faker.lorem.word())
-    },
-    'ja-JP': {
-        name: '日本語',
-        locale: 'ja-JP',
-        reviewTemplates: Array.from({ length: 5 }, () => (faker) => faker.lorem.sentence()),
-        titlePatterns: Array.from({ length: 5 }, () => (faker) => faker.lorem.words({ min: 2, max: 4 })),
-        publisherSuffixes: (faker) => Array.from({ length: 6 }, () => faker.lorem.word() + ' ' + faker.lorem.word())
-    }
-};
+// Simple color palette for book covers
+const COVER_COLORS = [
+    '#FF6B6B', '#4ECDC4', '#45B7D1', '#96CEB4', '#FFEAA7',
+    '#DDA0DD', '#98D8C8', '#F7DC6F', '#BB8FCE', '#85C1E9'
+];
 
-// Helper function to get language configuration
-function getLanguageConfig(region = 'en-US') {
-    return LANGUAGES[region] || LANGUAGES['en-US'];
-}
-
-// Function to generate dynamic reviews using Faker
-function generateReviewText(rng, region = 'en-US') {
-    // Set faker seed for deterministic results
-    faker.seed(rng());
-
-    const langConfig = getLanguageConfig(region);
-    const templates = langConfig.reviewTemplates;
-    const template = templates[Math.floor(rng() * templates.length)];
-    return template(faker);
-}
-
-function generateAuthorName(rng, region = 'en-US') {
-    // Set faker seed for deterministic results
-    faker.seed(rng());
-
-    // Generate names in the specific language using locale-specific faker
-    const { faker: localeFaker } = require('@faker-js/faker');
-    localeFaker.setLocale(region);
-    localeFaker.seed(rng());
-
-    return `${localeFaker.person.firstName()} ${localeFaker.person.lastName()}`;
-}
-
-function generatePublisherName(rng, region = 'en-US') {
-    // Set faker seed for deterministic results
-    faker.seed(rng());
-
-    const langConfig = getLanguageConfig(region);
-    const suffixes = langConfig.publisherSuffixes(faker);
-    const suffix = faker.helpers.arrayElement(suffixes);
-
-    // Use locale-specific faker for company names
-    const { faker: localeFaker } = require('@faker-js/faker');
-    localeFaker.setLocale(region);
-    localeFaker.seed(rng());
-
-    return `${localeFaker.company.name()} ${suffix}`;
-}
-
-function generateBookTitle(rng, region = 'en-US') {
-    // Set faker seed for deterministic results
-    faker.seed(rng());
-
-    const langConfig = getLanguageConfig(region);
-    const patterns = langConfig.titlePatterns;
-    const pattern = patterns[Math.floor(rng() * patterns.length)];
-    const title = pattern(faker);
-
-    // Capitalize first letter of each word for proper title case
-    return title.split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
-}
-
-function generateBooks({ page, limit, seed, region, avgLikes, avgReviews }) {
-    // Combine user seed with page number to ensure different pages have different data
-    // but same seed always produces same results
+function generateBooks({ page, limit, seed, region = 'en-US', avgLikes = 0, avgReviews = 0 }) {
     const combinedSeed = `${seed}_${page}`;
     const rng = seedrandom(combinedSeed);
 
-    // Ensure parameters are numbers
+    // Set faker locale and seed
+    faker.setLocale(region);
+    faker.seed(rng());
+
     const avgLikesNum = parseFloat(avgLikes);
     const avgReviewsNum = parseFloat(avgReviews);
-
     const books = [];
-    // Calculate start index based on actual books loaded in previous pages
-    // Page 1: 20 books (1-20), Page 2: 10 books (21-30), Page 3: 10 books (31-40), etc.
+
+    // Calculate start index for pagination
     const startIndex = page === 1 ? 1 : 20 + (page - 2) * 10 + 1;
 
     for (let i = 0; i < limit; i++) {
         const bookIndex = startIndex + i;
-        const bookSeed = `${combinedSeed}_${bookIndex}`; // Unique seed for each book
+        const bookSeed = `${combinedSeed}_${bookIndex}`;
         const bookRng = seedrandom(bookSeed);
 
-        // Generate book data using faker
-        const title = generateBookTitle(bookRng, region);
-        const author = generateAuthorName(bookRng, region);
-        const publisher = generatePublisherName(bookRng, region);
-        const year = 1990 + Math.floor(bookRng() * 34); // 1990-2023
+        // Set faker seed for this book
+        faker.seed(bookRng());
+
+        // Generate basic book data
+        const title = faker.lorem.words({ min: 2, max: 4 })
+            .split(' ')
+            .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+            .join(' ');
+
+        const author = `${faker.person.firstName()} ${faker.person.lastName()}`;
+        const publisher = `${faker.company.name()} ${faker.lorem.word()}`;
+        const year = 1990 + Math.floor(bookRng() * 34);
 
         // Generate ISBN
-        const isbn = generateISBN(bookRng);
+        const isbn = `978-${Math.floor(bookRng() * 10)}-${Math.floor(bookRng() * 100000).toString().padStart(5, '0')}-${Math.floor(bookRng() * 10000).toString().padStart(4, '0')}-${Math.floor(bookRng() * 10)}`;
 
-        // Generate likes (fractional support with clear probability logic)
-        let likes;
-        if (avgLikesNum === 0) {
-            likes = 0;
-        } else if (avgLikesNum <= 1) {
-            // For fractional values like 0.5, use probability logic
-            const randomValue = bookRng();
-            if (randomValue < avgLikesNum) {
-                likes = 1;
+        // Generate likes
+        let likes = 0;
+        if (avgLikesNum > 0) {
+            if (avgLikesNum <= 1) {
+                likes = bookRng() < avgLikesNum ? 1 : 0;
             } else {
-                likes = 0;
+                likes = Math.max(0, Math.floor(avgLikesNum + (bookRng() - 0.5) * 2));
             }
-        } else {
-            // For values > 1, use normal distribution around the average
-            likes = Math.floor(avgLikesNum + (bookRng() - 0.5) * 2);
         }
 
-        // Generate reviews (fractional support with clear probability logic)
-        let reviewCount;
-        if (avgReviewsNum === 0) {
-            reviewCount = 0;
-        } else if (avgReviewsNum <= 1) {
-            // For fractional values like 0.5, use probability logic
-            const randomValue = bookRng();
-            if (randomValue < avgReviewsNum) {
-                reviewCount = 1;
+        // Generate reviews
+        let reviewCount = 0;
+        if (avgReviewsNum > 0) {
+            if (avgReviewsNum <= 1) {
+                reviewCount = bookRng() < avgReviewsNum ? 1 : 0;
             } else {
-                reviewCount = 0;
+                reviewCount = Math.max(0, Math.floor(avgReviewsNum + (bookRng() - 0.5) * 2));
             }
-        } else {
-            // For values > 1, use normal distribution around the average
-            reviewCount = Math.floor(avgReviewsNum + (bookRng() - 0.5) * 2);
         }
-        const bookReviews = [];
 
+        // Generate review data
+        const reviews = [];
         for (let j = 0; j < reviewCount; j++) {
-            const reviewText = generateReviewText(bookRng, region);
-            const reviewerName = generateAuthorName(bookRng, region);
-            const reviewerCompany = generatePublisherName(bookRng, region);
-
-            bookReviews.push({
-                text: reviewText,
-                author: reviewerName,
-                company: reviewerCompany
+            reviews.push({
+                text: faker.lorem.sentence(),
+                author: `${faker.person.firstName()} ${faker.person.lastName()}`,
+                company: `${faker.company.name()} ${faker.lorem.word()}`
             });
         }
 
-        // Generate book cover data
-        const coverColors = [
-            '#FF6B6B', '#4ECDC4', '#45B7D1', '#96CEB4', '#FFEAA7',
-            '#DDA0DD', '#98D8C8', '#F7DC6F', '#BB8FCE', '#85C1E9'
-        ];
-        const coverColor = coverColors[Math.floor(bookRng() * coverColors.length)];
+        // Select cover color
+        const coverColor = COVER_COLORS[Math.floor(bookRng() * COVER_COLORS.length)];
 
         books.push({
             index: bookIndex,
@@ -179,8 +82,8 @@ function generateBooks({ page, limit, seed, region, avgLikes, avgReviews }) {
             title,
             author,
             publisher: `${publisher}, ${year}`,
-            likes: Math.max(0, likes),
-            reviews: bookReviews,
+            likes,
+            reviews,
             cover: {
                 color: coverColor,
                 title,
@@ -190,18 +93,6 @@ function generateBooks({ page, limit, seed, region, avgLikes, avgReviews }) {
     }
 
     return books;
-}
-
-function generateISBN(rng) {
-    const prefix = '978';
-    const group = Math.floor(rng() * 10);
-    const publisher = Math.floor(rng() * 100000);
-    const title = Math.floor(rng() * 10000);
-
-    // Calculate check digit (simplified)
-    const checkDigit = Math.floor(rng() * 10);
-
-    return `${prefix}-${group}-${publisher.toString().padStart(5, '0')}-${title.toString().padStart(4, '0')}-${checkDigit}`;
 }
 
 module.exports = { generateBooks }; 
