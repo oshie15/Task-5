@@ -42,6 +42,9 @@ function getLanguageConfig(region = 'en-US') {
 function generateReviewText(rng, region = 'en-US') {
     // Set faker seed for deterministic results
     faker.seed(rng());
+    
+    // Set faker locale based on region
+    faker.setLocale(region);
 
     const langConfig = getLanguageConfig(region);
     const templates = langConfig.reviewTemplates;
@@ -52,6 +55,9 @@ function generateReviewText(rng, region = 'en-US') {
 function generateAuthorName(rng, region = 'en-US') {
     // Set faker seed for deterministic results
     faker.seed(rng());
+    
+    // Set faker locale based on region
+    faker.setLocale(region);
 
     // All languages use the same name generation pattern
     return `${faker.person.firstName()} ${faker.person.lastName()}`;
@@ -60,6 +66,9 @@ function generateAuthorName(rng, region = 'en-US') {
 function generatePublisherName(rng, region = 'en-US') {
     // Set faker seed for deterministic results
     faker.seed(rng());
+    
+    // Set faker locale based on region
+    faker.setLocale(region);
 
     const langConfig = getLanguageConfig(region);
     const suffixes = langConfig.publisherSuffixes(faker);
@@ -70,6 +79,9 @@ function generatePublisherName(rng, region = 'en-US') {
 function generateBookTitle(rng, region = 'en-US') {
     // Set faker seed for deterministic results
     faker.seed(rng());
+    
+    // Set faker locale based on region
+    faker.setLocale(region);
 
     const langConfig = getLanguageConfig(region);
     const patterns = langConfig.titlePatterns;
