@@ -11,16 +11,15 @@ function generateBooks({ page, limit, seed, region = 'en-US', avgLikes = 0, avgR
     const combinedSeed = `${seed}_${page}`;
     const rng = seedrandom(combinedSeed);
 
-    // Set faker locale and seed
-    faker.setLocale(region);
+    // Set faker seed
     faker.seed(rng());
 
     const avgLikesNum = parseFloat(avgLikes);
     const avgReviewsNum = parseFloat(avgReviews);
     const books = [];
 
-    // Calculate start index for pagination
-    const startIndex = page === 1 ? 1 : 20 + (page - 2) * 10 + 1;
+    // Calculate start index for pagination - ensure sequential numbering
+    const startIndex = (page - 1) * limit + 1;
 
     for (let i = 0; i < limit; i++) {
         const bookIndex = startIndex + i;

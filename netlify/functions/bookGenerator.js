@@ -157,9 +157,8 @@ function generateBooks({ page, limit, seed, region, avgLikes, avgReviews }) {
     const avgReviewsNum = parseFloat(avgReviews);
 
     const books = [];
-    // Calculate start index based on actual books loaded in previous pages
-    // Page 1: 20 books (1-20), Page 2: 10 books (21-30), Page 3: 10 books (31-40), etc.
-    const startIndex = page === 1 ? 1 : 20 + (page - 2) * 10 + 1;
+    // Calculate start index for pagination - ensure sequential numbering
+    const startIndex = (page - 1) * limit + 1;
 
     for (let i = 0; i < limit; i++) {
         const bookIndex = startIndex + i;
