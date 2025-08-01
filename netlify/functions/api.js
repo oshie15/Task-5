@@ -27,15 +27,28 @@ exports.handler = async (event, context) => {
             const { page = 1, limit = 20, seed = 42, region = 'en-US', avgLikes = 5, avgReviews = 4.7 } = event.queryStringParameters || {};
             console.log('Books API called with params:', { page, limit, seed, region, avgLikes, avgReviews });
 
-            const books = generateBooks({
-                page: parseInt(page),
-                limit: parseInt(limit),
-                seed: parseInt(seed),
-                region,
-                avgLikes: parseFloat(avgLikes),
-                avgReviews: parseFloat(avgReviews)
-            });
-            console.log('Generated books count:', books.length);
+            try {
+                const books = generateBooks({
+                    page: parseInt(page),
+                    limit: parseInt(limit),
+                    seed: parseInt(seed),
+                    region,
+                    avgLikes: parseFloat(avgLikes),
+                    avgReviews: parseFloat(avgReviews)
+                });
+                console.log('Generated books count:', books.length);
+                console.log('First book sample:', books[0] ? JSON.stringify(books[0]) : 'No books generated');
+            } catch (error) {
+                console.error('Error generating books:', error);
+                return {
+                    statusCode: 500,
+                    headers: {
+                        ...headers,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ error: 'Failed to generate books', details: error.message })
+                };
+            }
 
             return {
                 statusCode: 200,

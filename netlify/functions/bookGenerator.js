@@ -47,11 +47,8 @@ function generateReviewText(rng, region = 'en-US') {
 }
 
 function generateAuthorName(rng, region = 'en-US') {
-    // Generate names in the specific language using locale-specific faker
-    const { faker: localeFaker } = require('@faker-js/faker');
-    localeFaker.setLocale(region);
-
-    return `${localeFaker.person.firstName()} ${localeFaker.person.lastName()}`;
+    // Generate names using the main faker instance
+    return `${faker.person.firstName()} ${faker.person.lastName()}`;
 }
 
 function generatePublisherName(rng, region = 'en-US') {
@@ -59,11 +56,7 @@ function generatePublisherName(rng, region = 'en-US') {
     const suffixes = langConfig.publisherSuffixes(faker);
     const suffix = faker.helpers.arrayElement(suffixes);
 
-    // Use locale-specific faker for company names
-    const { faker: localeFaker } = require('@faker-js/faker');
-    localeFaker.setLocale(region);
-
-    return `${localeFaker.company.name()} ${suffix}`;
+    return `${faker.company.name()} ${suffix}`;
 }
 
 function generateBookTitle(rng, region = 'en-US') {
