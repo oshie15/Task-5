@@ -1,4 +1,3 @@
-const faker = require('faker');
 const seedrandom = require('seedrandom');
 
 // Large lookup tables for realistic data generation

@@ -3,11 +3,10 @@
 	"version": "1.0.0",
 	"description": "Netlify Functions for Bookstore API",
 	"main": "api.js",
-	"dependencies": {
-		"csv-writer": "^1.6.0",
-		"seedrandom": "^3.0.5",
-		"faker": "^6.6.6"
-	},
+	  "dependencies": {
+    "csv-writer": "^1.6.0",
+    "seedrandom": "^3.0.5"
+  },
 	"engines": {
 		"node": ">=18.0.0"
 	}
