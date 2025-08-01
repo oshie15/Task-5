@@ -6,77 +6,29 @@ const LANGUAGES = {
     'en-US': {
         name: 'English',
         locale: 'en-US',
-        reviewTemplates: [
-            (faker) => `This book ${faker.lorem.sentence()}`,
-            (faker) => `A ${faker.lorem.word()} that will ${faker.lorem.words({ min: 2, max: 4 })}. ${faker.lorem.sentence()}`,
-            (faker) => `I ${faker.lorem.words({ min: 2, max: 4 })} from start to finish. ${faker.lorem.sentence()}`,
-            (faker) => `The author has a ${faker.lorem.word()} voice that ${faker.lorem.words({ min: 2, max: 4 })}.`,
-            (faker) => `An ${faker.lorem.word()} ${faker.lorem.word()} that left me ${faker.lorem.words({ min: 1, max: 2 })}.`
-        ],
-        titlePatterns: [
-            (faker) => faker.lorem.words({ min: 2, max: 4 }),
-            (faker) => `The ${faker.lorem.words({ min: 1, max: 3 })}`,
-            (faker) => `${faker.lorem.words({ min: 1, max: 2 })} of ${faker.lorem.words({ min: 1, max: 2 })}`,
-            (faker) => `${faker.lorem.words({ min: 1, max: 2 })} in ${faker.lorem.words({ min: 1, max: 2 })}`,
-            (faker) => `${faker.lorem.words({ min: 1, max: 2 })} and ${faker.lorem.words({ min: 1, max: 2 })}`
-        ],
+        reviewTemplates: Array.from({ length: 5 }, () => (faker) => faker.lorem.sentence()),
+        titlePatterns: Array.from({ length: 5 }, () => (faker) => faker.lorem.words({ min: 2, max: 4 })),
         publisherSuffixes: (faker) => Array.from({ length: 6 }, () => faker.lorem.word() + ' ' + faker.lorem.word())
     },
     'de-DE': {
         name: 'Deutsch',
         locale: 'de-DE',
-        reviewTemplates: [
-            (faker) => `Dieses Buch ${faker.lorem.sentence()}`,
-            (faker) => `Ein ${faker.lorem.word()}, das ${faker.lorem.words({ min: 2, max: 4 })}. ${faker.lorem.sentence()}`,
-            (faker) => `Ich ${faker.lorem.words({ min: 2, max: 4 })}. ${faker.lorem.sentence()}`,
-            (faker) => `Der Autor hat eine ${faker.lorem.word()} Stimme, die ${faker.lorem.words({ min: 2, max: 4 })}.`,
-            (faker) => `Eine ${faker.lorem.word()} ${faker.lorem.word()}, die mich ${faker.lorem.words({ min: 1, max: 2 })}.`
-        ],
-        titlePatterns: [
-            (faker) => `Der ${faker.lorem.words({ min: 1, max: 2 })}`,
-            (faker) => `Die ${faker.lorem.words({ min: 1, max: 2 })}`,
-            (faker) => `Das ${faker.lorem.words({ min: 1, max: 2 })}`,
-            (faker) => `${faker.lorem.words({ min: 1, max: 2 })} von ${faker.lorem.words({ min: 1, max: 2 })}`,
-            (faker) => `${faker.lorem.words({ min: 1, max: 2 })} und ${faker.lorem.words({ min: 1, max: 2 })}`
-        ],
+        reviewTemplates: Array.from({ length: 5 }, () => (faker) => faker.lorem.sentence()),
+        titlePatterns: Array.from({ length: 5 }, () => (faker) => faker.lorem.words({ min: 2, max: 4 })),
         publisherSuffixes: (faker) => Array.from({ length: 6 }, () => faker.lorem.word() + ' ' + faker.lorem.word())
     },
     'fr-FR': {
         name: 'Français',
         locale: 'fr-FR',
-        reviewTemplates: [
-            (faker) => `Ce livre ${faker.lorem.sentence()}`,
-            (faker) => `Un ${faker.lorem.word()} qui ${faker.lorem.words({ min: 2, max: 4 })}. ${faker.lorem.sentence()}`,
-            (faker) => `Je ${faker.lorem.words({ min: 2, max: 4 })}. ${faker.lorem.sentence()}`,
-            (faker) => `L'auteur a une voix ${faker.lorem.word()} qui ${faker.lorem.words({ min: 2, max: 4 })}.`,
-            (faker) => `Des ${faker.lorem.word()} ${faker.lorem.word()} qui m'ont ${faker.lorem.words({ min: 1, max: 2 })}.`
-        ],
-        titlePatterns: [
-            (faker) => `Le ${faker.lorem.words({ min: 1, max: 2 })}`,
-            (faker) => `La ${faker.lorem.words({ min: 1, max: 2 })}`,
-            (faker) => `Les ${faker.lorem.words({ min: 1, max: 2 })}`,
-            (faker) => `${faker.lorem.words({ min: 1, max: 2 })} de ${faker.lorem.words({ min: 1, max: 2 })}`,
-            (faker) => `${faker.lorem.words({ min: 1, max: 2 })} et ${faker.lorem.words({ min: 1, max: 2 })}`
-        ],
+        reviewTemplates: Array.from({ length: 5 }, () => (faker) => faker.lorem.sentence()),
+        titlePatterns: Array.from({ length: 5 }, () => (faker) => faker.lorem.words({ min: 2, max: 4 })),
         publisherSuffixes: (faker) => Array.from({ length: 6 }, () => faker.lorem.word() + ' ' + faker.lorem.word())
     },
     'ja-JP': {
         name: '日本語',
         locale: 'ja-JP',
-        reviewTemplates: [
-            (faker) => `この本は${faker.lorem.sentence()}`,
-            (faker) => `${faker.lorem.word()}な${faker.lorem.word()}です。${faker.lorem.sentence()}`,
-            (faker) => `${faker.lorem.words({ min: 2, max: 4 })}。${faker.lorem.sentence()}`,
-            (faker) => `作者の${faker.lorem.word()}な声が${faker.lorem.words({ min: 2, max: 4 })}。`,
-            (faker) => `${faker.lorem.word()}な${faker.lorem.word()}で${faker.lorem.words({ min: 1, max: 2 })}。`
-        ],
-        titlePatterns: [
-            (faker) => `${faker.lorem.words({ min: 1, max: 2 })}の${faker.lorem.words({ min: 1, max: 2 })}`,
-            (faker) => `${faker.lorem.words({ min: 1, max: 2 })}と${faker.lorem.words({ min: 1, max: 2 })}`,
-            (faker) => `${faker.lorem.words({ min: 1, max: 2 })}：${faker.lorem.words({ min: 1, max: 2 })}`,
-            (faker) => `${faker.lorem.words({ min: 1, max: 2 })}・${faker.lorem.words({ min: 1, max: 2 })}`,
-            (faker) => `${faker.lorem.words({ min: 1, max: 2 })}から${faker.lorem.words({ min: 1, max: 2 })}`
-        ],
+        reviewTemplates: Array.from({ length: 5 }, () => (faker) => faker.lorem.sentence()),
+        titlePatterns: Array.from({ length: 5 }, () => (faker) => faker.lorem.words({ min: 2, max: 4 })),
         publisherSuffixes: (faker) => Array.from({ length: 6 }, () => faker.lorem.word() + ' ' + faker.lorem.word())
     }
 };
