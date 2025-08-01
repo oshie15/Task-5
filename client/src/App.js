@@ -26,7 +26,7 @@ const App = () => {
             const response = await axios.get('/.netlify/functions/api/books', {
                 params: {
                     page,
-                    limit: page === 1 ? 20 : 10,
+                    limit: 20,
                     seed,
                     region,
                     avgLikes,
@@ -44,7 +44,7 @@ const App = () => {
             }
 
             // For infinite scrolling, assume there are more books if we got the requested amount
-            const requestedLimit = page === 1 ? 20 : 10;
+            const requestedLimit = 20;
             setHasMore(newBooks.length === requestedLimit);
             setCurrentPage(page);
         } catch (error) {
