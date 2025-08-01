@@ -60,10 +60,74 @@ function generatePublisherName(rng, region = 'en-US') {
 // Function to generate review text
 function generateReviewText(rng, region = 'en-US') {
     const reviews = {
-        'en-US': ['Excellent book! Highly recommended.', 'A masterpiece that will stand the test of time.', 'Outstanding quality and engaging narrative.', 'Wonderful story with compelling characters.', 'Amazing content that keeps you hooked.'],
-        'de-DE': ['Ausgezeichnetes Buch! Sehr empfehlenswert.', 'Ein Meisterwerk, das die Zeit überdauern wird.', 'Hervorragende Qualität und fesselnde Erzählung.', 'Wundervolle Geschichte mit überzeugenden Charakteren.', 'Erstaunlicher Inhalt, der einen fesselt.'],
-        'fr-FR': ['Excellent livre! Très recommandé.', 'Un chef-d\'œuvre qui résistera à l\'épreuve du temps.', 'Qualité exceptionnelle et narration engageante.', 'Histoire merveilleuse avec des personnages convaincants.', 'Contenu incroyable qui vous tient en haleine.'],
-        'ja-JP': ['素晴らしい本です！とてもおすすめです。', '時を超えて残る傑作です。', '素晴らしい品質と魅力的な物語です。', '魅力的なキャラクターを持つ素晴らしい物語です。', '最初から最後まで引き込まれる驚くべき内容です。']
+        'en-US': [
+            'This book completely exceeded my expectations. The author masterfully weaves together complex themes with such clarity that you can\'t help but be drawn into the narrative.',
+            'I found myself staying up late into the night, unable to put this book down. The character development is exceptional, and the plot twists kept me guessing until the very end.',
+            'What sets this book apart is the author\'s unique voice and perspective. It\'s refreshing to read something that feels genuinely original in today\'s literary landscape.',
+            'The prose is absolutely beautiful - every sentence feels carefully crafted. This is the kind of book you\'ll want to read slowly, savoring each chapter.',
+            'I was skeptical at first, but this book won me over completely. The world-building is immersive, and the dialogue feels natural and engaging throughout.',
+            'This is exactly the kind of book I love to recommend to friends. It\'s intelligent, entertaining, and leaves you with something to think about long after you\'ve finished.',
+            'The pacing is perfect - never too slow, never too rushed. The author has a real talent for keeping readers engaged while building tension and developing characters.',
+            'I appreciate how the author doesn\'t shy away from difficult topics. The book handles complex themes with sensitivity and nuance, making it both thought-provoking and accessible.',
+            'The ending was satisfying without being predictable. It\'s rare to find a book that ties up loose ends so well while still leaving room for the reader\'s imagination.',
+            'This book has earned a permanent place on my bookshelf. I know I\'ll be revisiting it again and again, discovering new layers with each read.',
+            'The historical research that went into this book is evident on every page. It\'s clear the author did their homework, and it makes the story all the more compelling.',
+            'I love how the author creates such vivid imagery. I could practically see, hear, and smell the world they were describing. It\'s truly immersive storytelling.',
+            'This book tackles important social issues without being preachy. The message is woven naturally into the story, making it both educational and entertaining.',
+            'The character relationships are so well-developed. You really feel like you know these people by the end of the book, and you care about what happens to them.',
+            'I was impressed by the author\'s ability to write from multiple perspectives. Each character has a distinct voice, and the shifting viewpoints add depth to the story.'
+        ],
+        'de-DE': [
+            'Dieses Buch hat meine Erwartungen völlig übertroffen. Der Autor verwebt meisterhaft komplexe Themen mit solcher Klarheit, dass man einfach in die Erzählung hineingezogen wird.',
+            'Ich habe mich dabei ertappt, bis spät in die Nacht wach zu bleiben, unfähig, dieses Buch aus der Hand zu legen. Die Charakterentwicklung ist außergewöhnlich.',
+            'Was dieses Buch auszeichnet, ist die einzigartige Stimme und Perspektive des Autors. Es ist erfrischend, etwas zu lesen, das sich in der heutigen Literaturlandschaft wirklich originell anfühlt.',
+            'Die Prosa ist absolut wunderschön - jeder Satz fühlt sich sorgfältig gestaltet an. Dies ist die Art von Buch, das man langsam lesen möchte.',
+            'Ich war zunächst skeptisch, aber dieses Buch hat mich völlig überzeugt. Die Weltgestaltung ist immersiv und der Dialog fühlt sich natürlich und fesselnd an.',
+            'Dies ist genau die Art von Buch, die ich gerne Freunden empfehle. Es ist intelligent, unterhaltsam und lässt einen noch lange nach dem Lesen nachdenken.',
+            'Das Tempo ist perfekt - nie zu langsam, nie zu überstürzt. Der Autor hat ein echtes Talent dafür, Leser zu fesseln.',
+            'Ich schätze, wie der Autor schwierige Themen nicht scheut. Das Buch behandelt komplexe Themen mit Sensibilität und Nuancen.',
+            'Das Ende war befriedigend, ohne vorhersehbar zu sein. Es ist selten, ein Buch zu finden, das lose Enden so gut zusammenbindet.',
+            'Dieses Buch hat einen dauerhaften Platz in meinem Bücherregal verdient. Ich weiß, dass ich es immer wieder lesen werde.',
+            'Die historische Recherche, die in dieses Buch gesteckt wurde, ist auf jeder Seite spürbar. Es ist klar, dass der Autor seine Hausaufgaben gemacht hat.',
+            'Ich liebe, wie der Autor so lebendige Bilder schafft. Ich konnte die beschriebene Welt praktisch sehen, hören und riechen.',
+            'Dieses Buch behandelt wichtige soziale Themen, ohne belehrend zu wirken. Die Botschaft ist natürlich in die Geschichte verwoben.',
+            'Die Charakterbeziehungen sind so gut entwickelt. Am Ende des Buches fühlt man sich, als würde man diese Menschen wirklich kennen.',
+            'Ich war beeindruckt von der Fähigkeit des Autors, aus mehreren Perspektiven zu schreiben. Jeder Charakter hat eine eigene Stimme.'
+        ],
+        'fr-FR': [
+            'Ce livre a complètement dépassé mes attentes. L\'auteur tisse magistralement des thèmes complexes avec une telle clarté qu\'on ne peut s\'empêcher d\'être entraîné dans le récit.',
+            'Je me suis surpris à veiller tard dans la nuit, incapable de poser ce livre. Le développement des personnages est exceptionnel et les rebondissements m\'ont tenu en haleine.',
+            'Ce qui distingue ce livre, c\'est la voix et la perspective uniques de l\'auteur. C\'est rafraîchissant de lire quelque chose qui semble vraiment original.',
+            'La prose est absolument magnifique - chaque phrase semble soigneusement élaborée. C\'est le genre de livre qu\'on veut lire lentement.',
+            'J\'étais sceptique au début, mais ce livre m\'a complètement conquis. La construction du monde est immersive et les dialogues semblent naturels.',
+            'C\'est exactement le genre de livre que j\'aime recommander aux amis. Il est intelligent, divertissant et laisse à réfléchir.',
+            'Le rythme est parfait - jamais trop lent, jamais trop précipité. L\'auteur a un vrai talent pour maintenir l\'intérêt des lecteurs.',
+            'J\'apprécie que l\'auteur n\'esquive pas les sujets difficiles. Le livre traite des thèmes complexes avec sensibilité.',
+            'La fin était satisfaisante sans être prévisible. Il est rare de trouver un livre qui noue si bien les fils de l\'intrigue.',
+            'Ce livre a mérité une place permanente dans ma bibliothèque. Je sais que je le relirai encore et encore.',
+            'Les recherches historiques qui ont été menées pour ce livre sont évidentes à chaque page. L\'auteur a fait ses devoirs.',
+            'J\'aime comment l\'auteur crée des images si vives. Je pouvais pratiquement voir, entendre et sentir le monde décrit.',
+            'Ce livre aborde des questions sociales importantes sans être moralisateur. Le message est naturellement tissé dans l\'histoire.',
+            'Les relations entre les personnages sont si bien développées. On a vraiment l\'impression de connaître ces gens à la fin.',
+            'J\'étais impressionné par la capacité de l\'auteur à écrire depuis plusieurs perspectives. Chaque personnage a sa propre voix.'
+        ],
+        'ja-JP': [
+            'この本は私の期待を完全に上回りました。著者は複雑なテーマを巧みに織り交ぜ、読者を物語に引き込まずにはいられません。',
+            '夜遅くまで起きて、この本を手放せない自分に気づきました。キャラクターの成長は素晴らしく、プロットの展開に最後まで釘付けでした。',
+            'この本を際立たせているのは、著者の独特な声と視点です。現代の文学界で本当に独創的だと感じるものを読むのは新鮮です。',
+            '文章が絶対に美しいです - 一文一文が丁寧に作られているように感じます。これはゆっくり読んで味わいたい本です。',
+            '最初は懐疑的でしたが、この本に完全に魅了されました。世界観の構築は没入感があり、対話は自然で魅力的です。',
+            'これは友達に勧めたい本です。知的で、面白く、読み終わった後も長く考えさせられます。',
+            'ペースが完璧です - 遅すぎず、急ぎすぎず。著者は読者を引きつけ続ける真の才能を持っています。',
+            '著者が難しいテーマを避けないことを評価します。この本は複雑なテーマを繊細さとニュアンスで扱っています。',
+            '結末は予測可能ではなく満足のいくものでした。物語の糸をこれほど上手く結ぶ本を見つけるのは珍しいです。',
+            'この本は私の本棚に永続的な場所を獲得しました。何度も読み返すことを知っています。',
+            'この本に費やされた歴史的研究はどのページにも明らかです。著者が宿題をしたことは明確です。',
+            '著者がこれほど鮮やかなイメージを作り出す方法が好きです。説明されている世界を実質的に見て、聞いて、嗅ぐことができました。',
+            'この本は説教臭くなく重要な社会問題に取り組んでいます。メッセージは自然に物語に織り込まれています。',
+            'キャラクターの関係はとてもよく発達しています。本の終わりには、これらの人々を本当に知っているように感じます。',
+            '著者が複数の視点から書く能力に感銘を受けました。各キャラクターには独自の声があります。'
+        ]
     };
     
     const regionReviews = reviews[region] || reviews['en-US'];
