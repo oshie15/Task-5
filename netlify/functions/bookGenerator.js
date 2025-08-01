@@ -20,14 +20,7 @@ const LANGUAGES = {
             (faker) => `${faker.lorem.words({ min: 1, max: 2 })} in ${faker.lorem.words({ min: 1, max: 2 })}`,
             (faker) => `${faker.lorem.words({ min: 1, max: 2 })} and ${faker.lorem.words({ min: 1, max: 2 })}`
         ],
-        publisherSuffixes: (faker) => [
-            faker.lorem.word() + ' ' + faker.lorem.word(),
-            faker.lorem.word() + ' ' + faker.lorem.word(),
-            faker.lorem.word() + ' ' + faker.lorem.word(),
-            faker.lorem.word() + ' ' + faker.lorem.word(),
-            faker.lorem.word() + ' ' + faker.lorem.word(),
-            faker.lorem.word() + ' ' + faker.lorem.word()
-        ]
+        publisherSuffixes: (faker) => Array.from({ length: 6 }, () => faker.lorem.word() + ' ' + faker.lorem.word())
     },
     'de-DE': {
         name: 'Deutsch',
@@ -46,14 +39,7 @@ const LANGUAGES = {
             (faker) => `${faker.lorem.words({ min: 1, max: 2 })} von ${faker.lorem.words({ min: 1, max: 2 })}`,
             (faker) => `${faker.lorem.words({ min: 1, max: 2 })} und ${faker.lorem.words({ min: 1, max: 2 })}`
         ],
-        publisherSuffixes: (faker) => [
-            faker.lorem.word() + ' ' + faker.lorem.word(),
-            faker.lorem.word() + ' ' + faker.lorem.word(),
-            faker.lorem.word() + ' ' + faker.lorem.word(),
-            faker.lorem.word() + ' ' + faker.lorem.word(),
-            faker.lorem.word() + ' ' + faker.lorem.word(),
-            faker.lorem.word() + ' ' + faker.lorem.word()
-        ]
+        publisherSuffixes: (faker) => Array.from({ length: 6 }, () => faker.lorem.word() + ' ' + faker.lorem.word())
     },
     'fr-FR': {
         name: 'Français',
@@ -72,14 +58,7 @@ const LANGUAGES = {
             (faker) => `${faker.lorem.words({ min: 1, max: 2 })} de ${faker.lorem.words({ min: 1, max: 2 })}`,
             (faker) => `${faker.lorem.words({ min: 1, max: 2 })} et ${faker.lorem.words({ min: 1, max: 2 })}`
         ],
-        publisherSuffixes: (faker) => [
-            faker.lorem.word() + ' ' + faker.lorem.word(),
-            faker.lorem.word() + ' ' + faker.lorem.word(),
-            faker.lorem.word() + ' ' + faker.lorem.word(),
-            faker.lorem.word() + ' ' + faker.lorem.word(),
-            faker.lorem.word() + ' ' + faker.lorem.word(),
-            faker.lorem.word() + ' ' + faker.lorem.word()
-        ]
+        publisherSuffixes: (faker) => Array.from({ length: 6 }, () => faker.lorem.word() + ' ' + faker.lorem.word())
     },
     'ja-JP': {
         name: '日本語',
@@ -98,14 +77,7 @@ const LANGUAGES = {
             (faker) => `${faker.lorem.words({ min: 1, max: 2 })}・${faker.lorem.words({ min: 1, max: 2 })}`,
             (faker) => `${faker.lorem.words({ min: 1, max: 2 })}から${faker.lorem.words({ min: 1, max: 2 })}`
         ],
-        publisherSuffixes: (faker) => [
-            faker.lorem.word() + ' ' + faker.lorem.word(),
-            faker.lorem.word() + ' ' + faker.lorem.word(),
-            faker.lorem.word() + ' ' + faker.lorem.word(),
-            faker.lorem.word() + ' ' + faker.lorem.word(),
-            faker.lorem.word() + ' ' + faker.lorem.word(),
-            faker.lorem.word() + ' ' + faker.lorem.word()
-        ]
+        publisherSuffixes: (faker) => Array.from({ length: 6 }, () => faker.lorem.word() + ' ' + faker.lorem.word())
     }
 };
 
