@@ -47,7 +47,7 @@ function generateReviewText(rng, region = 'en-US') {
         'fr-FR': ['Excellent livre!', 'Très recommandé!', 'Un must!', 'Qualité exceptionnelle!', 'Histoire merveilleuse!'],
         'ja-JP': ['素晴らしい本です！', 'とてもおすすめです！', '必読です！', '素晴らしい品質です！', '素晴らしい物語です！']
     };
-    
+
     const regionReviews = reviews[region] || reviews['en-US'];
     return regionReviews[Math.floor(rng() * regionReviews.length)];
 }
@@ -60,7 +60,7 @@ function generateAuthorName(rng, region = 'en-US') {
         'fr-FR': ['Jean Dupont', 'Marie Martin', 'Pierre Durand', 'Sophie Bernard', 'Michel Petit'],
         'ja-JP': ['田中太郎', '佐藤花子', '鈴木一郎', '高橋美咲', '渡辺健太']
     };
-    
+
     const regionNames = names[region] || names['en-US'];
     return regionNames[Math.floor(rng() * regionNames.length)];
 }
@@ -73,7 +73,7 @@ function generatePublisherName(rng, region = 'en-US') {
         'fr-FR': ['Random House', 'Penguin Livres', 'HarperCollins', 'Simon & Schuster', 'Macmillan'],
         'ja-JP': ['ランダムハウス', 'ペンギンブックス', 'ハーパーコリンズ', 'サイモン&シュスター', 'マクミラン']
     };
-    
+
     const regionPublishers = publishers[region] || publishers['en-US'];
     return regionPublishers[Math.floor(rng() * regionPublishers.length)];
 }
@@ -86,7 +86,7 @@ function generateBookTitle(rng, region = 'en-US') {
         'fr-FR': ['La Grande Aventure', 'Mystère de la Nuit', 'Voyage vers le Succès', 'Trésors Cachés', 'Le Dernier Espoir'],
         'ja-JP': ['素晴らしい冒険', '夜の謎', '成功への旅', '隠された宝物', '最後の希望']
     };
-    
+
     const regionTitles = titles[region] || titles['en-US'];
     return regionTitles[Math.floor(rng() * regionTitles.length)];
 }
