@@ -40,31 +40,35 @@ function getLanguageConfig(region = 'en-US') {
 
 // Function to generate dynamic reviews using Faker
 function generateReviewText(rng, region = 'en-US') {
-    const langConfig = getLanguageConfig(region);
-    const templates = langConfig.reviewTemplates;
-    const template = templates[Math.floor(rng() * templates.length)];
-    return template(faker);
+    // Create a new faker instance with the specific locale
+    const { faker: localeFaker } = require('@faker-js/faker');
+    localeFaker.setLocale(region);
+
+    return localeFaker.lorem.sentence();
 }
 
 function generateAuthorName(rng, region = 'en-US') {
-    // Generate names using the main faker instance
-    return `${faker.person.firstName()} ${faker.person.lastName()}`;
+    // Create a new faker instance with the specific locale
+    const { faker: localeFaker } = require('@faker-js/faker');
+    localeFaker.setLocale(region);
+
+    return `${localeFaker.person.firstName()} ${localeFaker.person.lastName()}`;
 }
 
 function generatePublisherName(rng, region = 'en-US') {
-    const langConfig = getLanguageConfig(region);
-    const suffixFunctions = langConfig.publisherSuffixes(faker);
-    const suffixFunction = faker.helpers.arrayElement(suffixFunctions);
-    const suffix = suffixFunction(faker);
+    // Create a new faker instance with the specific locale
+    const { faker: localeFaker } = require('@faker-js/faker');
+    localeFaker.setLocale(region);
 
-    return `${faker.company.name()} ${suffix}`;
+    return `${localeFaker.company.name()} Publishing`;
 }
 
 function generateBookTitle(rng, region = 'en-US') {
-    const langConfig = getLanguageConfig(region);
-    const patterns = langConfig.titlePatterns;
-    const pattern = patterns[Math.floor(rng() * patterns.length)];
-    const title = pattern(faker);
+    // Create a new faker instance with the specific locale
+    const { faker: localeFaker } = require('@faker-js/faker');
+    localeFaker.setLocale(region);
+
+    const title = localeFaker.lorem.words({ min: 2, max: 4 });
 
     // Capitalize first letter of each word for proper title case
     return title.split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');

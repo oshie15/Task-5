@@ -1,4 +1,4 @@
-// const { generateBooks } = require('./bookGenerator');
+const { generateBooks } = require('./bookGenerator');
 const { exportToCSV } = require('./csvExporter');
 
 exports.handler = async (event, context) => {
@@ -27,36 +27,28 @@ exports.handler = async (event, context) => {
             const { page = 1, limit = 20, seed = 42, region = 'en-US', avgLikes = 5, avgReviews = 4.7 } = event.queryStringParameters || {};
             console.log('Books API called with params:', { page, limit, seed, region, avgLikes, avgReviews });
 
-            // Generate simple book data without external dependencies
-            const books = [];
-            const startIndex = page === 1 ? 1 : 20 + (page - 2) * 10 + 1;
-
-            for (let i = 0; i < parseInt(limit); i++) {
-                const bookIndex = startIndex + i;
-                
-                books.push({
-                    index: bookIndex,
-                    isbn: `978-${Math.floor(Math.random() * 10)}-${Math.floor(Math.random() * 100000).toString().padStart(5, '0')}-${Math.floor(Math.random() * 10000).toString().padStart(4, '0')}-${Math.floor(Math.random() * 10)}`,
-                    title: `Book Title ${bookIndex}`,
-                    author: `Author ${bookIndex}`,
-                    publisher: `Publisher ${bookIndex}, ${1990 + Math.floor(Math.random() * 34)}`,
-                    likes: Math.floor(Math.random() * 10),
-                    reviews: [
-                        {
-                            text: `This is a great book ${bookIndex}!`,
-                            author: `Reviewer ${bookIndex}`,
-                            company: `Company ${bookIndex}`
-                        }
-                    ],
-                    cover: {
-                        color: ['#FF6B6B', '#4ECDC4', '#45B7D1', '#96CEB4', '#FFEAA7'][Math.floor(Math.random() * 5)],
-                        title: `Book Title ${bookIndex}`,
-                        author: `Author ${bookIndex}`
-                    }
+            try {
+                const books = generateBooks({
+                    page: parseInt(page),
+                    limit: parseInt(limit),
+                    seed: parseInt(seed),
+                    region,
+                    avgLikes: parseFloat(avgLikes),
+                    avgReviews: parseFloat(avgReviews)
                 });
+                console.log('Generated books count:', books.length);
+                console.log('First book sample:', books[0] ? JSON.stringify(books[0]) : 'No books generated');
+            } catch (error) {
+                console.error('Error generating books:', error);
+                return {
+                    statusCode: 500,
+                    headers: {
+                        ...headers,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ error: 'Failed to generate books', details: error.message })
+                };
             }
-            
-            console.log('Generated books count:', books.length);
 
             return {
                 statusCode: 200,
