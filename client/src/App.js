@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import { Download, ChevronDown, ChevronUp, ThumbsUp } from 'lucide-react';
+import { getLanguageOptions, getLanguageConfig } from './config';
 import './App.css';
 
 const App = () => {
@@ -12,17 +13,12 @@ const App = () => {
     const [hasMore, setHasMore] = useState(true);
 
     // Control parameters
-    const [region, setRegion] = useState('en-US');
+    const [region, setRegion] = useState(getLanguageConfig().locale);
     const [seed, setSeed] = useState(42);
     const [avgLikes, setAvgLikes] = useState(5);
     const [avgReviews, setAvgReviews] = useState(4.7);
 
-    const regions = [
-        { value: 'en-US', label: 'English (US)' },
-        { value: 'fr-FR', label: 'French (France)' },
-        { value: 'de-DE', label: 'German (Germany)' },
-        { value: 'ja-JP', label: 'Japanese (Japan)' }
-    ];
+    const regions = getLanguageOptions();
 
     const fetchBooks = useCallback(async (page = 1, append = false) => {
         setLoading(true);

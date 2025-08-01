@@ -1,5 +1,6 @@
 const { generateBooks } = require('./bookGenerator');
 const { exportToCSV } = require('./csvExporter');
+const { getLanguageConfig } = require('./config');
 
 exports.handler = async (event, context) => {
     // Enable CORS
@@ -24,7 +25,7 @@ exports.handler = async (event, context) => {
         console.log('Processed path:', path);
 
         if (path === '/books') {
-            const { page = 1, limit = 20, seed = 42, region = 'en-US', avgLikes = 5, avgReviews = 4.7 } = event.queryStringParameters || {};
+            const { page = 1, limit = 20, seed = 42, region = getLanguageConfig().locale, avgLikes = 5, avgReviews = 4.7 } = event.queryStringParameters || {};
             console.log('Books API called with params:', { page, limit, seed, region, avgLikes, avgReviews });
 
             const books = generateBooks({
@@ -48,7 +49,7 @@ exports.handler = async (event, context) => {
         }
 
         if (path === '/export-csv') {
-            const { seed = 42, region = 'en-US', avgLikes = 5, avgReviews = 4.7, pages = 1 } = event.queryStringParameters || {};
+            const { seed = 42, region = getLanguageConfig().locale, avgLikes = 5, avgReviews = 4.7, pages = 1 } = event.queryStringParameters || {};
 
             const csvData = await exportToCSV({
                 seed: parseInt(seed),

@@ -1,160 +1,156 @@
-const seedrandom = require('seedrandom');
 const { faker } = require('@faker-js/faker');
+const seedrandom = require('seedrandom');
+
+// Language-specific data directly in the generator
+const LANGUAGES = {
+    'en-US': {
+        name: 'English',
+        locale: 'en-US',
+        reviewTemplates: [
+            (faker) => `This book ${faker.lorem.sentence()}`,
+            (faker) => `A ${faker.lorem.word()} that will ${faker.lorem.words({ min: 2, max: 4 })}. ${faker.lorem.sentence()}`,
+            (faker) => `I ${faker.lorem.words({ min: 2, max: 4 })} from start to finish. ${faker.lorem.sentence()}`,
+            (faker) => `The author has a ${faker.lorem.word()} voice that ${faker.lorem.words({ min: 2, max: 4 })}.`,
+            (faker) => `An ${faker.lorem.word()} ${faker.lorem.word()} that left me ${faker.lorem.words({ min: 1, max: 2 })}.`
+        ],
+        titlePatterns: [
+            (faker) => faker.lorem.words({ min: 2, max: 4 }),
+            (faker) => `The ${faker.lorem.words({ min: 1, max: 3 })}`,
+            (faker) => `${faker.lorem.words({ min: 1, max: 2 })} of ${faker.lorem.words({ min: 1, max: 2 })}`,
+            (faker) => `${faker.lorem.words({ min: 1, max: 2 })} in ${faker.lorem.words({ min: 1, max: 2 })}`,
+            (faker) => `${faker.lorem.words({ min: 1, max: 2 })} and ${faker.lorem.words({ min: 1, max: 2 })}`
+        ],
+        publisherSuffixes: (faker) => [
+            faker.lorem.word() + ' ' + faker.lorem.word(),
+            faker.lorem.word() + ' ' + faker.lorem.word(),
+            faker.lorem.word() + ' ' + faker.lorem.word(),
+            faker.lorem.word() + ' ' + faker.lorem.word(),
+            faker.lorem.word() + ' ' + faker.lorem.word(),
+            faker.lorem.word() + ' ' + faker.lorem.word()
+        ]
+    },
+    'de-DE': {
+        name: 'Deutsch',
+        locale: 'de-DE',
+        reviewTemplates: [
+            (faker) => `Dieses Buch ${faker.lorem.sentence()}`,
+            (faker) => `Ein ${faker.lorem.word()}, das ${faker.lorem.words({ min: 2, max: 4 })}. ${faker.lorem.sentence()}`,
+            (faker) => `Ich ${faker.lorem.words({ min: 2, max: 4 })}. ${faker.lorem.sentence()}`,
+            (faker) => `Der Autor hat eine ${faker.lorem.word()} Stimme, die ${faker.lorem.words({ min: 2, max: 4 })}.`,
+            (faker) => `Eine ${faker.lorem.word()} ${faker.lorem.word()}, die mich ${faker.lorem.words({ min: 1, max: 2 })}.`
+        ],
+        titlePatterns: [
+            (faker) => `Der ${faker.lorem.words({ min: 1, max: 2 })}`,
+            (faker) => `Die ${faker.lorem.words({ min: 1, max: 2 })}`,
+            (faker) => `Das ${faker.lorem.words({ min: 1, max: 2 })}`,
+            (faker) => `${faker.lorem.words({ min: 1, max: 2 })} von ${faker.lorem.words({ min: 1, max: 2 })}`,
+            (faker) => `${faker.lorem.words({ min: 1, max: 2 })} und ${faker.lorem.words({ min: 1, max: 2 })}`
+        ],
+        publisherSuffixes: (faker) => [
+            faker.lorem.word() + ' ' + faker.lorem.word(),
+            faker.lorem.word() + ' ' + faker.lorem.word(),
+            faker.lorem.word() + ' ' + faker.lorem.word(),
+            faker.lorem.word() + ' ' + faker.lorem.word(),
+            faker.lorem.word() + ' ' + faker.lorem.word(),
+            faker.lorem.word() + ' ' + faker.lorem.word()
+        ]
+    },
+    'fr-FR': {
+        name: 'Français',
+        locale: 'fr-FR',
+        reviewTemplates: [
+            (faker) => `Ce livre ${faker.lorem.sentence()}`,
+            (faker) => `Un ${faker.lorem.word()} qui ${faker.lorem.words({ min: 2, max: 4 })}. ${faker.lorem.sentence()}`,
+            (faker) => `Je ${faker.lorem.words({ min: 2, max: 4 })}. ${faker.lorem.sentence()}`,
+            (faker) => `L'auteur a une voix ${faker.lorem.word()} qui ${faker.lorem.words({ min: 2, max: 4 })}.`,
+            (faker) => `Des ${faker.lorem.word()} ${faker.lorem.word()} qui m'ont ${faker.lorem.words({ min: 1, max: 2 })}.`
+        ],
+        titlePatterns: [
+            (faker) => `Le ${faker.lorem.words({ min: 1, max: 2 })}`,
+            (faker) => `La ${faker.lorem.words({ min: 1, max: 2 })}`,
+            (faker) => `Les ${faker.lorem.words({ min: 1, max: 2 })}`,
+            (faker) => `${faker.lorem.words({ min: 1, max: 2 })} de ${faker.lorem.words({ min: 1, max: 2 })}`,
+            (faker) => `${faker.lorem.words({ min: 1, max: 2 })} et ${faker.lorem.words({ min: 1, max: 2 })}`
+        ],
+        publisherSuffixes: (faker) => [
+            faker.lorem.word() + ' ' + faker.lorem.word(),
+            faker.lorem.word() + ' ' + faker.lorem.word(),
+            faker.lorem.word() + ' ' + faker.lorem.word(),
+            faker.lorem.word() + ' ' + faker.lorem.word(),
+            faker.lorem.word() + ' ' + faker.lorem.word(),
+            faker.lorem.word() + ' ' + faker.lorem.word()
+        ]
+    },
+    'ja-JP': {
+        name: '日本語',
+        locale: 'ja-JP',
+        reviewTemplates: [
+            (faker) => `この本は${faker.lorem.sentence()}`,
+            (faker) => `${faker.lorem.word()}な${faker.lorem.word()}です。${faker.lorem.sentence()}`,
+            (faker) => `${faker.lorem.words({ min: 2, max: 4 })}。${faker.lorem.sentence()}`,
+            (faker) => `作者の${faker.lorem.word()}な声が${faker.lorem.words({ min: 2, max: 4 })}。`,
+            (faker) => `${faker.lorem.word()}な${faker.lorem.word()}で${faker.lorem.words({ min: 1, max: 2 })}。`
+        ],
+        titlePatterns: [
+            (faker) => `${faker.lorem.words({ min: 1, max: 2 })}の${faker.lorem.words({ min: 1, max: 2 })}`,
+            (faker) => `${faker.lorem.words({ min: 1, max: 2 })}と${faker.lorem.words({ min: 1, max: 2 })}`,
+            (faker) => `${faker.lorem.words({ min: 1, max: 2 })}：${faker.lorem.words({ min: 1, max: 2 })}`,
+            (faker) => `${faker.lorem.words({ min: 1, max: 2 })}・${faker.lorem.words({ min: 1, max: 2 })}`,
+            (faker) => `${faker.lorem.words({ min: 1, max: 2 })}から${faker.lorem.words({ min: 1, max: 2 })}`
+        ],
+        publisherSuffixes: (faker) => [
+            faker.lorem.word() + ' ' + faker.lorem.word(),
+            faker.lorem.word() + ' ' + faker.lorem.word(),
+            faker.lorem.word() + ' ' + faker.lorem.word(),
+            faker.lorem.word() + ' ' + faker.lorem.word(),
+            faker.lorem.word() + ' ' + faker.lorem.word(),
+            faker.lorem.word() + ' ' + faker.lorem.word()
+        ]
+    }
+};
+
+// Helper function to get language configuration
+function getLanguageConfig(region = 'en-US') {
+    return LANGUAGES[region] || LANGUAGES['en-US'];
+}
 
 // Function to generate dynamic reviews using Faker
 function generateReviewText(rng, region = 'en-US') {
     // Set faker seed for deterministic results
     faker.seed(rng());
 
-    const reviewTemplates = {
-        'en-US': [
-            () => `This book completely changed my perspective on ${faker.lorem.words({ min: 1, max: 2 })}.`,
-            () => `A masterpiece that will stand the test of time. ${faker.lorem.sentence()}`,
-            () => `I couldn't put it down from start to finish. ${faker.lorem.sentence()}`,
-            () => `The author has a unique voice that resonates deeply with ${faker.lorem.words({ min: 1, max: 2 })}.`,
-            () => `An emotional rollercoaster that left me ${faker.lorem.words({ min: 1, max: 2 })}.`,
-            () => `The characters are so well-developed and ${faker.lorem.words({ min: 1, max: 2 })}.`,
-            () => `A thought-provoking read that challenges ${faker.lorem.words({ min: 1, max: 2 })}.`,
-            () => `This book explores the ${faker.lorem.words({ min: 1, max: 2 })} in ways I never expected.`,
-            () => `A compelling narrative about ${faker.lorem.words({ min: 1, max: 2 })} that kept me engaged throughout.`,
-            () => `The author's insights into ${faker.lorem.words({ min: 1, max: 2 })} are truly remarkable.`,
-            () => `This is a book that will stay with me for ${faker.lorem.words({ min: 1, max: 2 })}.`,
-            () => `A beautifully written story about ${faker.lorem.words({ min: 1, max: 2 })} and ${faker.lorem.words({ min: 1, max: 2 })}.`,
-            () => `I found myself completely immersed in the world of ${faker.lorem.words({ min: 1, max: 2 })}.`,
-            () => `The author's treatment of ${faker.lorem.words({ min: 1, max: 2 })} is both sensitive and insightful.`,
-            () => `This book offers a fresh perspective on ${faker.lorem.words({ min: 1, max: 2 })}.`
-        ],
-        'de-DE': [
-            () => `Dieses Buch hat meine Sicht auf ${faker.lorem.words({ min: 1, max: 2 })} völlig verändert.`,
-            () => `Ein Meisterwerk, das die Zeit überdauern wird. ${faker.lorem.sentence()}`,
-            () => `Ich konnte es nicht aus der Hand legen. ${faker.lorem.sentence()}`,
-            () => `Der Autor hat eine einzigartige Stimme, die tief berührt. ${faker.lorem.sentence()}`,
-            () => `Eine emotionale Achterbahnfahrt, die mich ${faker.lorem.words({ min: 1, max: 2 })} zurückließ.`,
-            () => `Die Charaktere sind so gut entwickelt und ${faker.lorem.words({ min: 1, max: 2 })}.`,
-            () => `Ein nachdenklicher Lesestoff über ${faker.lorem.words({ min: 1, max: 2 })}.`,
-            () => `Dieses Buch erforscht ${faker.lorem.words({ min: 1, max: 2 })} auf unerwartete Weise.`,
-            () => `Eine fesselnde Erzählung über ${faker.lorem.words({ min: 1, max: 2 })}.`,
-            () => `Die Einsichten des Autors zu ${faker.lorem.words({ min: 1, max: 2 })} sind wirklich bemerkenswert.`
-        ],
-        'fr-FR': [
-            () => `Ce livre a complètement changé ma perspective sur ${faker.lorem.words({ min: 1, max: 2 })}.`,
-            () => `Un chef-d'œuvre qui résistera à l'épreuve du temps. ${faker.lorem.sentence()}`,
-            () => `Je n'ai pas pu le lâcher du début à la fin. ${faker.lorem.sentence()}`,
-            () => `L'auteur a une voix unique qui résonne profondément. ${faker.lorem.sentence()}`,
-            () => `Des montagnes russes émotionnelles qui m'ont laissé ${faker.lorem.words({ min: 1, max: 2 })}.`,
-            () => `Les personnages sont si bien développés et ${faker.lorem.words({ min: 1, max: 2 })}.`,
-            () => `Une lecture stimulante sur ${faker.lorem.words({ min: 1, max: 2 })}.`,
-            () => `Ce livre explore ${faker.lorem.words({ min: 1, max: 2 })} de manière inattendue.`,
-            () => `Un récit captivant sur ${faker.lorem.words({ min: 1, max: 2 })}.`,
-            () => `Les idées de l'auteur sur ${faker.lorem.words({ min: 1, max: 2 })} sont vraiment remarquables.`
-        ],
-        'ja-JP': [
-            () => `この本は私の${faker.lorem.words({ min: 1, max: 2 })}観を完全に変えました。`,
-            () => `時を超えて残る傑作です。${faker.lorem.sentence()}`,
-            () => `最初から最後まで手放せませんでした。${faker.lorem.sentence()}`,
-            () => `作者の独特な声が深く響きます。${faker.lorem.sentence()}`,
-            () => `息を呑むような感情のジェットコースターでした。${faker.lorem.sentence()}`,
-            () => `キャラクターがとても良く描かれていて${faker.lorem.words({ min: 1, max: 2 })}です。`,
-            () => `${faker.lorem.words({ min: 1, max: 2 })}について考えさせられる読み物です。`,
-            () => `この本は${faker.lorem.words({ min: 1, max: 2 })}を予想外の方法で探求しています。`,
-            () => `${faker.lorem.words({ min: 1, max: 2 })}についての魅力的な物語です。`,
-            () => `作者の${faker.lorem.words({ min: 1, max: 2 })}への洞察は本当に素晴らしいです。`
-        ]
-    };
-
-    const templates = reviewTemplates[region] || reviewTemplates['en-US'];
+    const langConfig = getLanguageConfig(region);
+    const templates = langConfig.reviewTemplates;
     const template = templates[Math.floor(rng() * templates.length)];
-    return template();
+    return template(faker);
 }
 
 function generateAuthorName(rng, region = 'en-US') {
     // Set faker seed for deterministic results
     faker.seed(rng());
 
-    const nameGenerators = {
-        'en-US': () => `${faker.person.firstName()} ${faker.person.lastName()}`,
-        'de-DE': () => `${faker.person.firstName()} ${faker.person.lastName()}`,
-        'fr-FR': () => `${faker.person.firstName()} ${faker.person.lastName()}`,
-        'ja-JP': () => `${faker.person.firstName()} ${faker.person.lastName()}`
-    };
-
-    const generator = nameGenerators[region] || nameGenerators['en-US'];
-    return generator();
+    // All languages use the same name generation pattern
+    return `${faker.person.firstName()} ${faker.person.lastName()}`;
 }
 
 function generatePublisherName(rng, region = 'en-US') {
     // Set faker seed for deterministic results
     faker.seed(rng());
 
-    const publisherGenerators = {
-        'en-US': () => `${faker.company.name()} ${faker.helpers.arrayElement(['Publishing', 'Books', 'Press', 'House', 'Group', 'Media'])}`,
-        'de-DE': () => `${faker.company.name()} ${faker.helpers.arrayElement(['Verlag', 'Bücher', 'Presse', 'Haus', 'Gruppe', 'Medien'])}`,
-        'fr-FR': () => `${faker.company.name()} ${faker.helpers.arrayElement(['Éditions', 'Livres', 'Presse', 'Maison', 'Groupe', 'Médias'])}`,
-        'ja-JP': () => `${faker.company.name()} ${faker.helpers.arrayElement(['出版', '書籍', '出版社', 'メディア', 'グループ', 'プレス'])}`
-    };
-
-    const generator = publisherGenerators[region] || publisherGenerators['en-US'];
-    return generator();
+    const langConfig = getLanguageConfig(region);
+    const suffixes = langConfig.publisherSuffixes(faker);
+    const suffix = faker.helpers.arrayElement(suffixes);
+    return `${faker.company.name()} ${suffix}`;
 }
 
 function generateBookTitle(rng, region = 'en-US') {
     // Set faker seed for deterministic results
     faker.seed(rng());
 
-    const titleTypes = {
-        'en-US': [
-            () => faker.lorem.words({ min: 2, max: 4 }),
-            () => `The ${faker.lorem.words({ min: 1, max: 3 })}`,
-            () => `${faker.lorem.words({ min: 1, max: 2 })} of ${faker.lorem.words({ min: 1, max: 2 })}`,
-            () => `${faker.lorem.words({ min: 1, max: 2 })} in ${faker.lorem.words({ min: 1, max: 2 })}`,
-            () => `${faker.lorem.words({ min: 1, max: 2 })} and ${faker.lorem.words({ min: 1, max: 2 })}`,
-            () => `${faker.lorem.words({ min: 1, max: 2 })}: ${faker.lorem.words({ min: 1, max: 2 })}`,
-            () => `${faker.lorem.words({ min: 1, max: 2 })} & ${faker.lorem.words({ min: 1, max: 2 })}`,
-            () => `${faker.lorem.words({ min: 1, max: 2 })} for ${faker.lorem.words({ min: 1, max: 2 })}`,
-            () => `${faker.lorem.words({ min: 1, max: 2 })} with ${faker.lorem.words({ min: 1, max: 2 })}`,
-            () => `${faker.lorem.words({ min: 1, max: 2 })} without ${faker.lorem.words({ min: 1, max: 2 })}`
-        ],
-        'de-DE': [
-            () => `Der ${faker.lorem.words({ min: 1, max: 2 })}`,
-            () => `Die ${faker.lorem.words({ min: 1, max: 2 })}`,
-            () => `Das ${faker.lorem.words({ min: 1, max: 2 })}`,
-            () => `${faker.lorem.words({ min: 1, max: 2 })} von ${faker.lorem.words({ min: 1, max: 2 })}`,
-            () => `${faker.lorem.words({ min: 1, max: 2 })} und ${faker.lorem.words({ min: 1, max: 2 })}`,
-            () => `${faker.lorem.words({ min: 1, max: 2 })} in ${faker.lorem.words({ min: 1, max: 2 })}`,
-            () => `${faker.lorem.words({ min: 1, max: 2 })} für ${faker.lorem.words({ min: 1, max: 2 })}`,
-            () => `${faker.lorem.words({ min: 1, max: 2 })} mit ${faker.lorem.words({ min: 1, max: 2 })}`,
-            () => `${faker.lorem.words({ min: 1, max: 2 })} ohne ${faker.lorem.words({ min: 1, max: 2 })}`,
-            () => `${faker.lorem.words({ min: 1, max: 2 })} durch ${faker.lorem.words({ min: 1, max: 2 })}`
-        ],
-        'fr-FR': [
-            () => `Le ${faker.lorem.words({ min: 1, max: 2 })}`,
-            () => `La ${faker.lorem.words({ min: 1, max: 2 })}`,
-            () => `Les ${faker.lorem.words({ min: 1, max: 2 })}`,
-            () => `${faker.lorem.words({ min: 1, max: 2 })} de ${faker.lorem.words({ min: 1, max: 2 })}`,
-            () => `${faker.lorem.words({ min: 1, max: 2 })} et ${faker.lorem.words({ min: 1, max: 2 })}`,
-            () => `${faker.lorem.words({ min: 1, max: 2 })} dans ${faker.lorem.words({ min: 1, max: 2 })}`,
-            () => `${faker.lorem.words({ min: 1, max: 2 })} pour ${faker.lorem.words({ min: 1, max: 2 })}`,
-            () => `${faker.lorem.words({ min: 1, max: 2 })} avec ${faker.lorem.words({ min: 1, max: 2 })}`,
-            () => `${faker.lorem.words({ min: 1, max: 2 })} sans ${faker.lorem.words({ min: 1, max: 2 })}`,
-            () => `${faker.lorem.words({ min: 1, max: 2 })} par ${faker.lorem.words({ min: 1, max: 2 })}`
-        ],
-        'ja-JP': [
-            () => `${faker.lorem.words({ min: 1, max: 2 })}の${faker.lorem.words({ min: 1, max: 2 })}`,
-            () => `${faker.lorem.words({ min: 1, max: 2 })}と${faker.lorem.words({ min: 1, max: 2 })}`,
-            () => `${faker.lorem.words({ min: 1, max: 2 })}：${faker.lorem.words({ min: 1, max: 2 })}`,
-            () => `${faker.lorem.words({ min: 1, max: 2 })}・${faker.lorem.words({ min: 1, max: 2 })}`,
-            () => `${faker.lorem.words({ min: 1, max: 2 })}から${faker.lorem.words({ min: 1, max: 2 })}`,
-            () => `${faker.lorem.words({ min: 1, max: 2 })}へ${faker.lorem.words({ min: 1, max: 2 })}`,
-            () => `${faker.lorem.words({ min: 1, max: 2 })}による${faker.lorem.words({ min: 1, max: 2 })}`,
-            () => `${faker.lorem.words({ min: 1, max: 2 })}について`,
-            () => `${faker.lorem.words({ min: 1, max: 2 })}として`,
-            () => `${faker.lorem.words({ min: 1, max: 2 })}としての${faker.lorem.words({ min: 1, max: 2 })}`
-        ]
-    };
-
-    const types = titleTypes[region] || titleTypes['en-US'];
-    const titleGenerator = types[Math.floor(rng() * types.length)];
-    const title = titleGenerator();
+    const langConfig = getLanguageConfig(region);
+    const patterns = langConfig.titlePatterns;
+    const pattern = patterns[Math.floor(rng() * patterns.length)];
+    const title = pattern(faker);
 
     // Capitalize first letter of each word for proper title case
     return title.split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');

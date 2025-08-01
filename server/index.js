@@ -2,6 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const { generateBooks } = require('./bookGenerator');
 const { exportToCSV } = require('./csvExporter');
+const { getLanguageConfig } = require('./config');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -17,7 +18,7 @@ app.get('/api/books', (req, res) => {
             page = 1,
             limit = 20,
             seed = Math.floor(Math.random() * 1000000),
-            region = 'en-US',
+            region = getLanguageConfig().locale,
             avgLikes = 5,
             avgReviews = 3
         } = req.query;
@@ -50,7 +51,7 @@ app.get('/api/export-csv', (req, res) => {
         const {
             pages = 1,
             seed = Math.floor(Math.random() * 1000000),
-            region = 'en-US',
+            region = getLanguageConfig().locale,
             avgLikes = 5,
             avgReviews = 3
         } = req.query;
