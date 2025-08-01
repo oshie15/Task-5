@@ -29,27 +29,27 @@ function getLanguageConfig(region = 'en-US') {
 // Function to generate dynamic reviews using Faker
 function generateReviewText(rng, region = 'en-US') {
     const langConfig = getLanguageConfig(region);
-    const chance = new Chance(rng);
+    const chance = new Chance(rng());
     return chance.sentence();
 }
 
 function generateAuthorName(rng, region = 'en-US') {
     const langConfig = getLanguageConfig(region);
-    const chance = new Chance(rng);
+    const chance = new Chance(rng());
     return `${chance.first()} ${chance.last()}`;
 }
 
 function generatePublisherName(rng, region = 'en-US') {
     const langConfig = getLanguageConfig(region);
-    const chance = new Chance(rng);
+    const chance = new Chance(rng());
     return `${chance.company()} Publishing`;
 }
 
 function generateBookTitle(rng, region = 'en-US') {
     const langConfig = getLanguageConfig(region);
-    const chance = new Chance(rng);
+    const chance = new Chance(rng());
     const title = chance.sentence({ words: chance.integer({ min: 3, max: 6 }) });
-    
+
     // Capitalize first letter of each word for proper title case
     return title.split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
 }
