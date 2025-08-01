@@ -1,23 +1,39 @@
 const Chance = require('chance');
 const seedrandom = require('seedrandom');
 
-// Language-specific data for Chance.js
+// Language-specific data with proper locale mappings
 const LANGUAGES = {
     'en-US': {
         name: 'English',
-        locale: 'en_US'
+        locale: 'en_US',
+        names: ['John Smith', 'Emma Johnson', 'Michael Brown', 'Sarah Davis', 'David Wilson', 'Lisa Anderson', 'Robert Taylor', 'Jennifer White'],
+        titles: ['The Great Adventure', 'Mystery of the Night', 'Journey to Success', 'Hidden Treasures', 'The Last Hope', 'Beyond the Horizon', 'Secrets of Time', 'The Lost Kingdom'],
+        reviews: ['Excellent book!', 'Highly recommended!', 'A must-read!', 'Outstanding quality!', 'Wonderful story!', 'Amazing content!', 'Fantastic writing!', 'Brilliant narrative!'],
+        publishers: ['Random House', 'Penguin Books', 'HarperCollins', 'Simon & Schuster', 'Macmillan', 'Scholastic', 'Bloomsbury', 'Hachette']
     },
     'de-DE': {
         name: 'Deutsch',
-        locale: 'de_DE'
+        locale: 'de_DE',
+        names: ['Hans Müller', 'Anna Schmidt', 'Klaus Weber', 'Maria Fischer', 'Peter Meyer', 'Sabine Wagner', 'Thomas Schulz', 'Monika Hoffmann'],
+        titles: ['Das Große Abenteuer', 'Geheimnis der Nacht', 'Reise zum Erfolg', 'Verborgene Schätze', 'Die Letzte Hoffnung', 'Jenseits des Horizonts', 'Geheimnisse der Zeit', 'Das Verlorene Königreich'],
+        reviews: ['Ausgezeichnetes Buch!', 'Sehr empfehlenswert!', 'Ein Muss!', 'Hervorragende Qualität!', 'Wundervolle Geschichte!', 'Erstaunlicher Inhalt!', 'Fantastisches Schreiben!', 'Brillante Erzählung!'],
+        publishers: ['Random House', 'Penguin Verlag', 'HarperCollins', 'Simon & Schuster', 'Macmillan', 'Scholastic', 'Bloomsbury', 'Hachette']
     },
     'fr-FR': {
         name: 'Français',
-        locale: 'fr_FR'
+        locale: 'fr_FR',
+        names: ['Jean Dupont', 'Marie Martin', 'Pierre Durand', 'Sophie Bernard', 'Michel Petit', 'Isabelle Moreau', 'François Dubois', 'Catherine Leroy'],
+        titles: ['La Grande Aventure', 'Mystère de la Nuit', 'Voyage vers le Succès', 'Trésors Cachés', 'Le Dernier Espoir', 'Au-delà de l\'Horizon', 'Secrets du Temps', 'Le Royaume Perdu'],
+        reviews: ['Excellent livre!', 'Très recommandé!', 'Un must!', 'Qualité exceptionnelle!', 'Histoire merveilleuse!', 'Contenu incroyable!', 'Écriture fantastique!', 'Narration brillante!'],
+        publishers: ['Random House', 'Penguin Livres', 'HarperCollins', 'Simon & Schuster', 'Macmillan', 'Scholastic', 'Bloomsbury', 'Hachette']
     },
     'ja-JP': {
         name: '日本語',
-        locale: 'ja'
+        locale: 'ja',
+        names: ['田中太郎', '佐藤花子', '鈴木一郎', '高橋美咲', '渡辺健太', '伊藤恵子', '山田次郎', '中村雅子'],
+        titles: ['素晴らしい冒険', '夜の謎', '成功への旅', '隠された宝物', '最後の希望', '地平線の向こう', '時の秘密', '失われた王国'],
+        reviews: ['素晴らしい本です！', 'とてもおすすめです！', '必読です！', '素晴らしい品質です！', '素晴らしい物語です！', '驚くべき内容です！', '素晴らしい文章です！', '素晴らしい物語です！'],
+        publishers: ['ランダムハウス', 'ペンギンブックス', 'ハーパーコリンズ', 'サイモン&シュスター', 'マクミラン', 'スコラスティック', 'ブルームズベリー', 'アシェット']
     }
 };
 
@@ -26,32 +42,33 @@ function getLanguageConfig(region = 'en-US') {
     return LANGUAGES[region] || LANGUAGES['en-US'];
 }
 
-// Function to generate dynamic reviews using Faker
-function generateReviewText(rng, region = 'en-US') {
-    const langConfig = getLanguageConfig(region);
-    const chance = new Chance(rng());
-    return chance.sentence();
+// Generic function to get random item from array using seeded random
+function getRandomItem(array, rng) {
+    return array[Math.floor(rng() * array.length)];
 }
 
+// Function to generate author name using language-specific data
 function generateAuthorName(rng, region = 'en-US') {
     const langConfig = getLanguageConfig(region);
-    const chance = new Chance(rng());
-    return `${chance.first()} ${chance.last()}`;
+    return getRandomItem(langConfig.names, rng);
 }
 
-function generatePublisherName(rng, region = 'en-US') {
-    const langConfig = getLanguageConfig(region);
-    const chance = new Chance(rng());
-    return `${chance.company()} Publishing`;
-}
-
+// Function to generate book title using language-specific data
 function generateBookTitle(rng, region = 'en-US') {
     const langConfig = getLanguageConfig(region);
-    const chance = new Chance(rng());
-    const title = chance.sentence({ words: chance.integer({ min: 3, max: 6 }) });
+    return getRandomItem(langConfig.titles, rng);
+}
 
-    // Capitalize first letter of each word for proper title case
-    return title.split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+// Function to generate review text using language-specific data
+function generateReviewText(rng, region = 'en-US') {
+    const langConfig = getLanguageConfig(region);
+    return getRandomItem(langConfig.reviews, rng);
+}
+
+// Function to generate publisher name using language-specific data
+function generatePublisherName(rng, region = 'en-US') {
+    const langConfig = getLanguageConfig(region);
+    return getRandomItem(langConfig.publishers, rng);
 }
 
 function generateBooks({ page, limit, seed, region, avgLikes, avgReviews }) {
