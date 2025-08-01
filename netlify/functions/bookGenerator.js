@@ -38,10 +38,10 @@ function getRandomItem(array, rng) {
 function generateAuthorName(rng, region = 'en-US') {
     const firstNames = FIRST_NAMES[region] || FIRST_NAMES['en-US'];
     const lastNames = LAST_NAMES[region] || LAST_NAMES['en-US'];
-    
+
     const firstName = getRandomItem(firstNames, rng);
     const lastName = getRandomItem(lastNames, rng);
-    
+
     return `${firstName} ${lastName}`;
 }
 
@@ -129,7 +129,7 @@ function generateReviewText(rng, region = 'en-US') {
             '著者が複数の視点から書く能力に感銘を受けました。各キャラクターには独自の声があります。'
         ]
     };
-    
+
     const regionReviews = reviews[region] || reviews['en-US'];
     return getRandomItem(regionReviews, rng);
 }
@@ -200,7 +200,7 @@ function generateBooks({ page, limit, seed, region, avgLikes, avgReviews }) {
             // For values > 1, use normal distribution around the average
             reviewCount = Math.floor(avgReviewsNum + (bookRng() - 0.5) * 2);
         }
-        
+
         const bookReviews = [];
 
         for (let j = 0; j < reviewCount; j++) {

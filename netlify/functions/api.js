@@ -29,7 +29,7 @@ exports.handler = async (event, context) => {
 
             // Simple book generation with language support using seedrandom
             const books = [];
-            const startIndex = page === 1 ? 1 : 20 + (page - 2) * 10 + 1;
+            const startIndex = (parseInt(page) - 1) * parseInt(limit) + 1;
             
             // Use seedrandom for deterministic results
             const seedrandom = require('seedrandom');
