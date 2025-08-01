@@ -26,19 +26,18 @@ const LANGUAGES = {
         name: 'Deutsch',
         locale: 'de-DE',
         reviewTemplates: [
-            (faker) => `Dieses Buch ${faker.lorem.sentence()}`,
-            (faker) => `Ein ${faker.lorem.word()}, das ${faker.lorem.words({ min: 2, max: 4 })}. ${faker.lorem.sentence()}`,
-            (faker) => `Ich ${faker.lorem.words({ min: 2, max: 4 })}. ${faker.lorem.sentence()}`,
-            (faker) => `Der Autor hat eine ${faker.lorem.word()} Stimme, die ${faker.lorem.words({ min: 2, max: 4 })}.`,
-            (faker) => `Eine ${faker.lorem.word()} ${faker.lorem.word()}, die mich ${faker.lorem.words({ min: 1, max: 2 })}.`
+            (faker) => `Ce livre ${faker.lorem.sentence()}`,
+            (faker) => `Un ${faker.lorem.word()} qui ${faker.lorem.words({ min: 2, max: 4 })}. ${faker.lorem.sentence()}`,
+            (faker) => `Je ${faker.lorem.words({ min: 2, max: 4 })}. ${faker.lorem.sentence()}`,
+            (faker) => `L'auteur a une voix ${faker.lorem.word()} qui ${faker.lorem.words({ min: 2, max: 4 })}.`,
+            (faker) => `Des ${faker.lorem.word()} ${faker.lorem.word()} qui m'ont ${faker.lorem.words({ min: 1, max: 2 })}.`
         ],
         titlePatterns: [
-            (faker) => `Der ${faker.lorem.words({ min: 1, max: 2 })}`,
-            (faker) => `Die ${faker.lorem.words({ min: 1, max: 2 })}`,
-            (faker) => `Das ${faker.lorem.words({ min: 1, max: 2 })}`,
-            (faker) => `${faker.lorem.words({ min: 1, max: 2 })} von ${faker.lorem.words({ min: 1, max: 2 })}`,
-            (faker) => `${faker.lorem.words({ min: 1, max: 2 })} und ${faker.lorem.words({ min: 1, max: 2 })}`
-        ],
+            (faker) => `Le ${faker.lorem.words({ min: 1, max: 2 })}`,
+            (faker) => `La ${faker.lorem.words({ min: 1, max: 2 })}`,
+            (faker) => `Les ${faker.lorem.words({ min: 1, max: 2 })}`,
+            (faker) => `${faker.lorem.words({ min: 1, max: 2 })} de ${faker.lorem.words({ min: 1, max: 2 })}`,
+            (faker) => `${faker.lorem.words({ min: 1, max: 2 })} et ${faker.lorem.words({ min: 1, max: 2 })}`
         publisherSuffixes: (faker) => Array.from({ length: 6 }, () => faker.lorem.word() + ' ' + faker.lorem.word())
     },
     'fr-FR': {
