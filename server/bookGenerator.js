@@ -1,18 +1,9 @@
 const seedrandom = require('seedrandom');
+const { faker } = require('@faker-js/faker');
 
 // Language-specific data
 const languageData = {
     'en-US': {
-        titles: [
-            'The Silent Echo', 'Beyond the Horizon', 'Whispers in the Dark', 'The Last Chapter', 'Midnight Dreams',
-            'Eternal Flame', 'Lost in Translation', 'The Hidden Truth', 'Breaking Point', 'Fallen Angels',
-            'The Great Divide', 'Shadow of Doubt', 'Rising Phoenix', 'The Final Countdown', 'Blind Faith',
-            'The Perfect Storm', 'Edge of Tomorrow', 'The Long Road', 'Breaking Free', 'The Last Stand',
-            'Stranger in New York', 'Bang!', '100 Things To Do With Cars', 'The Art of War', 'Peaceful Mind',
-            'Digital Revolution', 'The Green Mile', 'Shawshank Redemption', 'Forrest Gump', 'Pulp Fiction',
-            'The Matrix', 'Inception', 'Interstellar', 'The Dark Knight', 'Fight Club',
-            'American Beauty', 'The Godfather', 'Casablanca', 'Gone with the Wind', 'Citizen Kane'
-        ],
         authors: [
             'John Smith', 'Jane Doe', 'Michael Johnson', 'Sarah Wilson', 'David Brown',
             'Emily Davis', 'Robert Miller', 'Lisa Anderson', 'James Taylor', 'Jennifer Garcia',
@@ -29,14 +20,6 @@ const languageData = {
         ]
     },
     'de-DE': {
-        titles: [
-            'Der stille Echo', 'Jenseits des Horizonts', 'Flüstern in der Dunkelheit', 'Das letzte Kapitel', 'Mitternachtsträume',
-            'Ewige Flamme', 'Verloren in der Übersetzung', 'Die verborgene Wahrheit', 'Der Bruchpunkt', 'Gefallene Engel',
-            'Die große Kluft', 'Schatten des Zweifels', 'Aufsteigender Phönix', 'Der letzte Countdown', 'Blinder Glaube',
-            'Der perfekte Sturm', 'Kante von morgen', 'Der lange Weg', 'Befreiung', 'Der letzte Stand',
-            'Die digitale Revolution', 'Der grüne Weg', 'Die Erlösung', 'Forrest Gump', 'Pulp Fiction',
-            'Die Matrix', 'Inception', 'Interstellar', 'Der dunkle Ritter', 'Fight Club'
-        ],
         authors: [
             'Hans Müller', 'Anna Schmidt', 'Klaus Weber', 'Maria Fischer', 'Peter Wagner',
             'Sabine Meyer', 'Thomas Schulz', 'Ursula Becker', 'Wolfgang Hoffmann', 'Petra Schäfer',
@@ -51,14 +34,6 @@ const languageData = {
         ]
     },
     'fr-FR': {
-        titles: [
-            'Marseille et la dame rose', 'La librairie des livres interdits', 'Il suffit parfois d\'un été', 'Le Bleu', 'Bisous',
-            'La grand arbre', 'Le Petit Prince', 'Les Misérables', 'Notre-Dame de Paris', 'Le Comte de Monte-Cristo',
-            'Madame Bovary', 'L\'Étranger', 'Le Rouge et le Noir', 'Germinal', 'Nana',
-            'Bel-Ami', 'Pierre et Jean', 'Une vie', 'Mont-Oriol', 'Fort comme la mort',
-            'Notre cœur', 'L\'Inutile Beauté', 'Le Horla', 'Boule de Suif', 'La Parure',
-            'Mademoiselle Fifi', 'Contes de la bécasse', 'Le Rosier de Madame Husson', 'La Maison Tellier', 'En famille'
-        ],
         authors: [
             'Maribel Shiras', 'Capicine Semeaux', 'Jaques Albane Abelard', 'Lily-Belle de Shiraz', 'Guy de Lavrous',
             'Jaques Julie Vernes', 'Victor Hugo', 'Alexandre Dumas', 'Gustave Flaubert', 'Albert Camus',
@@ -74,14 +49,6 @@ const languageData = {
         ]
     },
     'ja-JP': {
-        titles: [
-            '静かなエコー', '地平線の向こう', '闇の中のささやき', '最後の章', '真夜中の夢',
-            '永遠の炎', '翻訳の中で迷子', '隠された真実', '限界点', '堕天使',
-            '大きな分岐', '疑いの影', '昇るフェニックス', '最後のカウントダウン', '盲目の信仰',
-            '完璧な嵐', '明日の端', '長い道のり', '自由への道', '最後の抵抗',
-            '東京の見知らぬ人', 'バン！', '車でできる100のこと', '戦いの芸術', '平和な心',
-            'デジタル革命', 'グリーンマイル', 'ショーシャンクの空に', 'フォレスト・ガンプ', 'パルプ・フィクション'
-        ],
         authors: [
             '田中太郎', '佐藤花子', '鈴木一郎', '高橋美咲', '渡辺健太',
             '伊藤愛', '山田次郎', '中村真理', '小林正男', '加藤恵',
@@ -148,8 +115,74 @@ const reviewTemplates = {
     ]
 };
 
+function generateBookTitle(rng, region = 'en-US') {
+    // Set faker seed for deterministic results
+    faker.seed(rng());
+
+    const titleTypes = {
+        'en-US': [
+            () => faker.lorem.words({ min: 2, max: 4 }),
+            () => `The ${faker.lorem.words({ min: 1, max: 3 })}`,
+            () => `${faker.lorem.words({ min: 1, max: 2 })} of ${faker.lorem.words({ min: 1, max: 2 })}`,
+            () => `${faker.lorem.words({ min: 1, max: 2 })} in ${faker.lorem.words({ min: 1, max: 2 })}`,
+            () => `${faker.lorem.words({ min: 1, max: 2 })} and ${faker.lorem.words({ min: 1, max: 2 })}`,
+            () => `${faker.lorem.words({ min: 1, max: 2 })}: ${faker.lorem.words({ min: 1, max: 2 })}`,
+            () => `${faker.lorem.words({ min: 1, max: 2 })} & ${faker.lorem.words({ min: 1, max: 2 })}`,
+            () => `${faker.lorem.words({ min: 1, max: 2 })} for ${faker.lorem.words({ min: 1, max: 2 })}`,
+            () => `${faker.lorem.words({ min: 1, max: 2 })} with ${faker.lorem.words({ min: 1, max: 2 })}`,
+            () => `${faker.lorem.words({ min: 1, max: 2 })} without ${faker.lorem.words({ min: 1, max: 2 })}`
+        ],
+        'de-DE': [
+            () => `Der ${faker.lorem.words({ min: 1, max: 2 })}`,
+            () => `Die ${faker.lorem.words({ min: 1, max: 2 })}`,
+            () => `Das ${faker.lorem.words({ min: 1, max: 2 })}`,
+            () => `${faker.lorem.words({ min: 1, max: 2 })} von ${faker.lorem.words({ min: 1, max: 2 })}`,
+            () => `${faker.lorem.words({ min: 1, max: 2 })} und ${faker.lorem.words({ min: 1, max: 2 })}`,
+            () => `${faker.lorem.words({ min: 1, max: 2 })} in ${faker.lorem.words({ min: 1, max: 2 })}`,
+            () => `${faker.lorem.words({ min: 1, max: 2 })} für ${faker.lorem.words({ min: 1, max: 2 })}`,
+            () => `${faker.lorem.words({ min: 1, max: 2 })} mit ${faker.lorem.words({ min: 1, max: 2 })}`,
+            () => `${faker.lorem.words({ min: 1, max: 2 })} ohne ${faker.lorem.words({ min: 1, max: 2 })}`,
+            () => `${faker.lorem.words({ min: 1, max: 2 })} durch ${faker.lorem.words({ min: 1, max: 2 })}`
+        ],
+        'fr-FR': [
+            () => `Le ${faker.lorem.words({ min: 1, max: 2 })}`,
+            () => `La ${faker.lorem.words({ min: 1, max: 2 })}`,
+            () => `Les ${faker.lorem.words({ min: 1, max: 2 })}`,
+            () => `${faker.lorem.words({ min: 1, max: 2 })} de ${faker.lorem.words({ min: 1, max: 2 })}`,
+            () => `${faker.lorem.words({ min: 1, max: 2 })} et ${faker.lorem.words({ min: 1, max: 2 })}`,
+            () => `${faker.lorem.words({ min: 1, max: 2 })} dans ${faker.lorem.words({ min: 1, max: 2 })}`,
+            () => `${faker.lorem.words({ min: 1, max: 2 })} pour ${faker.lorem.words({ min: 1, max: 2 })}`,
+            () => `${faker.lorem.words({ min: 1, max: 2 })} avec ${faker.lorem.words({ min: 1, max: 2 })}`,
+            () => `${faker.lorem.words({ min: 1, max: 2 })} sans ${faker.lorem.words({ min: 1, max: 2 })}`,
+            () => `${faker.lorem.words({ min: 1, max: 2 })} par ${faker.lorem.words({ min: 1, max: 2 })}`
+        ],
+        'ja-JP': [
+            () => `${faker.lorem.words({ min: 1, max: 2 })}の${faker.lorem.words({ min: 1, max: 2 })}`,
+            () => `${faker.lorem.words({ min: 1, max: 2 })}と${faker.lorem.words({ min: 1, max: 2 })}`,
+            () => `${faker.lorem.words({ min: 1, max: 2 })}：${faker.lorem.words({ min: 1, max: 2 })}`,
+            () => `${faker.lorem.words({ min: 1, max: 2 })}・${faker.lorem.words({ min: 1, max: 2 })}`,
+            () => `${faker.lorem.words({ min: 1, max: 2 })}から${faker.lorem.words({ min: 1, max: 2 })}`,
+            () => `${faker.lorem.words({ min: 1, max: 2 })}へ${faker.lorem.words({ min: 1, max: 2 })}`,
+            () => `${faker.lorem.words({ min: 1, max: 2 })}による${faker.lorem.words({ min: 1, max: 2 })}`,
+            () => `${faker.lorem.words({ min: 1, max: 2 })}について`,
+            () => `${faker.lorem.words({ min: 1, max: 2 })}として`,
+            () => `${faker.lorem.words({ min: 1, max: 2 })}としての${faker.lorem.words({ min: 1, max: 2 })}`
+        ]
+    };
+
+    const types = titleTypes[region] || titleTypes['en-US'];
+    const titleGenerator = types[Math.floor(rng() * types.length)];
+    const title = titleGenerator();
+
+    // Capitalize first letter of each word for proper title case
+    return title.split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+}
+
 function generateBooks({ page, limit, seed, region, avgLikes, avgReviews }) {
-    const rng = seedrandom(seed + page); // Combine seed with page number
+    // Combine user seed with page number to ensure different pages have different data
+    // but same seed always produces same results
+    const combinedSeed = `${seed}_${page}`;
+    const rng = seedrandom(combinedSeed);
 
     // Ensure parameters are numbers
     const avgLikesNum = parseFloat(avgLikes);
@@ -162,14 +195,14 @@ function generateBooks({ page, limit, seed, region, avgLikes, avgReviews }) {
 
     for (let i = 0; i < limit; i++) {
         const bookIndex = startIndex + i;
-        const bookSeed = seed + bookIndex; // Unique seed for each book
+        const bookSeed = `${combinedSeed}_${bookIndex}`; // Unique seed for each book
         const bookRng = seedrandom(bookSeed);
 
         const data = languageData[region] || languageData['en-US'];
         const reviews = reviewTemplates[region] || reviewTemplates['en-US'];
 
         // Generate book data
-        const title = data.titles[Math.floor(bookRng() * data.titles.length)];
+        const title = generateBookTitle(bookRng, region);
         const author = data.authors[Math.floor(bookRng() * data.authors.length)];
         const publisher = data.publishers[Math.floor(bookRng() * data.publishers.length)];
         const year = 1990 + Math.floor(bookRng() * 34); // 1990-2023

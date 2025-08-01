@@ -27,7 +27,6 @@ const App = () => {
     const fetchBooks = useCallback(async (page = 1, append = false) => {
         setLoading(true);
         try {
-
             const response = await axios.get('/.netlify/functions/api/books', {
                 params: {
                     page,
