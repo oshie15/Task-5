@@ -57,7 +57,7 @@ function generateAuthorName(rng, region = 'en-US') {
     const { faker: localeFaker } = require('@faker-js/faker');
     localeFaker.setLocale(region);
     localeFaker.seed(rng());
-    
+
     return `${localeFaker.person.firstName()} ${localeFaker.person.lastName()}`;
 }
 
@@ -68,12 +68,12 @@ function generatePublisherName(rng, region = 'en-US') {
     const langConfig = getLanguageConfig(region);
     const suffixes = langConfig.publisherSuffixes(faker);
     const suffix = faker.helpers.arrayElement(suffixes);
-    
+
     // Use locale-specific faker for company names
     const { faker: localeFaker } = require('@faker-js/faker');
     localeFaker.setLocale(region);
     localeFaker.seed(rng());
-    
+
     return `${localeFaker.company.name()} ${suffix}`;
 }
 
