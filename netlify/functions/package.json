@@ -1,0 +1,18 @@
+{
+	"name": "bookstore-api-functions",
+	"version": "1.0.0",
+	"description": "Netlify functions for bookstore API",
+	"main": "index.js",
+	"dependencies": {
+		"@faker-js/faker": "^8.0.0",
+		"csv-writer": "^1.6.0",
+		"seedrandom": "^3.0.5"
+	},
+	"devDependencies": {},
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1"
+	},
+	"keywords": [],
+	"author": "",
+	"license": "ISC"
+}

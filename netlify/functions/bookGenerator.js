@@ -1,155 +1,170 @@
 const seedrandom = require('seedrandom');
+const { faker } = require('@faker-js/faker');
 
-// Language-specific data
-const languageData = {
-    'en-US': {
-        titles: [
-            'The Silent Echo', 'Beyond the Horizon', 'Whispers in the Dark', 'The Last Chapter', 'Midnight Dreams',
-            'Eternal Flame', 'Lost in Translation', 'The Hidden Truth', 'Breaking Point', 'Fallen Angels',
-            'The Great Divide', 'Shadow of Doubt', 'Rising Phoenix', 'The Final Countdown', 'Blind Faith',
-            'The Perfect Storm', 'Edge of Tomorrow', 'The Long Road', 'Breaking Free', 'The Last Stand',
-            'Stranger in New York', 'Bang!', '100 Things To Do With Cars', 'The Art of War', 'Peaceful Mind',
-            'Digital Revolution', 'The Green Mile', 'Shawshank Redemption', 'Forrest Gump', 'Pulp Fiction',
-            'The Matrix', 'Inception', 'Interstellar', 'The Dark Knight', 'Fight Club',
-            'American Beauty', 'The Godfather', 'Casablanca', 'Gone with the Wind', 'Citizen Kane'
-        ],
-        authors: [
-            'John Smith', 'Jane Doe', 'Michael Johnson', 'Sarah Wilson', 'David Brown',
-            'Emily Davis', 'Robert Miller', 'Lisa Anderson', 'James Taylor', 'Jennifer Garcia',
-            'William Martinez', 'Amanda Rodriguez', 'Christopher Lee', 'Jessica White', 'Daniel Harris',
-            'Ashley Clark', 'Matthew Lewis', 'Nicole Walker', 'Joshua Hall', 'Stephanie Young',
-            'John Lee Smith', 'Phil G. McDormand', 'Lee D. Harvey', 'Mary Johnson', 'Tom Wilson',
-            'Alice Cooper', 'Bob Dylan', 'Jim Morrison', 'Janis Joplin', 'Elvis Presley'
-        ],
-        publishers: [
-            'Random House', 'Penguin Books', 'HarperCollins', 'Simon & Schuster', 'Macmillan',
-            'Hachette Book Group', 'Scholastic', 'Bloomsbury', 'Faber & Faber', 'Vintage Books',
-            'Knopf Doubleday', 'Crown Publishing', 'Little, Brown', 'St. Martin\'s Press', 'Tor Books',
-            'Ballantine Books', 'Bantam Books', 'Dell Publishing', 'Avon Books', 'Berkley Books'
-        ]
-    },
-    'de-DE': {
-        titles: [
-            'Der stille Echo', 'Jenseits des Horizonts', 'Flüstern in der Dunkelheit', 'Das letzte Kapitel', 'Mitternachtsträume',
-            'Ewige Flamme', 'Verloren in der Übersetzung', 'Die verborgene Wahrheit', 'Der Bruchpunkt', 'Gefallene Engel',
-            'Die große Kluft', 'Schatten des Zweifels', 'Aufsteigender Phönix', 'Der letzte Countdown', 'Blinder Glaube',
-            'Der perfekte Sturm', 'Kante von morgen', 'Der lange Weg', 'Befreiung', 'Der letzte Stand',
-            'Die digitale Revolution', 'Der grüne Weg', 'Die Erlösung', 'Forrest Gump', 'Pulp Fiction',
-            'Die Matrix', 'Inception', 'Interstellar', 'Der dunkle Ritter', 'Fight Club'
-        ],
-        authors: [
-            'Hans Müller', 'Anna Schmidt', 'Klaus Weber', 'Maria Fischer', 'Peter Wagner',
-            'Sabine Meyer', 'Thomas Schulz', 'Ursula Becker', 'Wolfgang Hoffmann', 'Petra Schäfer',
-            'Frank Koch', 'Monika Bauer', 'Jürgen Richter', 'Renate Klein', 'Dieter Wolf',
-            'Brigitte Neumann', 'Manfred Zimmermann', 'Helga Krüger', 'Rainer Schmitz', 'Gisela Lange'
-        ],
-        publishers: [
-            'Suhrkamp Verlag', 'Fischer Verlag', 'Rowohlt Verlag', 'Piper Verlag', 'dtv',
-            'Carl Hanser Verlag', 'S. Fischer Verlag', 'Kiepenheuer & Witsch', 'Ullstein Verlag', 'Goldmann Verlag',
-            'Heyne Verlag', 'Bastei Lübbe', 'Droemer Knaur', 'Ullstein Buchverlage', 'Blanvalet Verlag',
-            'Lübbe Verlag', 'Knaur Verlag', 'Wunderlich Verlag', 'Pendo Verlag', 'Kiepenheuer & Witsch'
-        ]
-    },
-    'fr-FR': {
-        titles: [
-            'Marseille et la dame rose', 'La librairie des livres interdits', 'Il suffit parfois d\'un été', 'Le Bleu', 'Bisous',
-            'La grand arbre', 'Le Petit Prince', 'Les Misérables', 'Notre-Dame de Paris', 'Le Comte de Monte-Cristo',
-            'Madame Bovary', 'L\'Étranger', 'Le Rouge et le Noir', 'Germinal', 'Nana',
-            'Bel-Ami', 'Pierre et Jean', 'Une vie', 'Mont-Oriol', 'Fort comme la mort',
-            'Notre cœur', 'L\'Inutile Beauté', 'Le Horla', 'Boule de Suif', 'La Parure',
-            'Mademoiselle Fifi', 'Contes de la bécasse', 'Le Rosier de Madame Husson', 'La Maison Tellier', 'En famille'
-        ],
-        authors: [
-            'Maribel Shiras', 'Capicine Semeaux', 'Jaques Albane Abelard', 'Lily-Belle de Shiraz', 'Guy de Lavrous',
-            'Jaques Julie Vernes', 'Victor Hugo', 'Alexandre Dumas', 'Gustave Flaubert', 'Albert Camus',
-            'Stendhal', 'Émile Zola', 'Guy de Maupassant', 'Honoré de Balzac', 'Marcel Proust',
-            'Jean-Paul Sartre', 'Simone de Beauvoir', 'Albert Camus', 'Jean Cocteau', 'André Gide',
-            'Colette', 'Sidonie-Gabrielle Colette', 'Marguerite Duras', 'Françoise Sagan', 'Patrick Modiano'
-        ],
-        publishers: [
-            'Gallimard', 'Éditions du Seuil', 'Flammarion', 'Albin Michel', 'Grasset',
-            'Fayard', 'Robert Laffont', 'Stock', 'Calmann-Lévy', 'Plon',
-            'Hachette Livre', 'Éditions Denoël', 'Éditions de Minuit', 'Christian Bourgois', 'P.O.L',
-            'Actes Sud', 'Éditions de l\'Olivier', 'Mercure de France', 'Éditions Julliard', 'Éditions Belfond'
-        ]
-    },
-    'ja-JP': {
-        titles: [
-            '静かなエコー', '地平線の向こう', '闇の中のささやき', '最後の章', '真夜中の夢',
-            '永遠の炎', '翻訳の中で迷子', '隠された真実', '限界点', '堕天使',
-            '大きな分岐', '疑いの影', '昇るフェニックス', '最後のカウントダウン', '盲目の信仰',
-            '完璧な嵐', '明日の端', '長い道のり', '自由への道', '最後の抵抗',
-            '東京の見知らぬ人', 'バン！', '車でできる100のこと', '戦いの芸術', '平和な心',
-            'デジタル革命', 'グリーンマイル', 'ショーシャンクの空に', 'フォレスト・ガンプ', 'パルプ・フィクション'
-        ],
-        authors: [
-            '田中太郎', '佐藤花子', '鈴木一郎', '高橋美咲', '渡辺健太',
-            '伊藤愛', '山田次郎', '中村真理', '小林正男', '加藤恵',
-            '吉田大輔', '松本由美', '井上雄一', '木村麻衣', '斎藤健二',
-            '山口智子', '森田和也', '池田美穂', '橋本達也', '阿部恵子',
-            '山田太郎', '佐々木花子', '田中一郎', '鈴木美咲', '高橋健太'
-        ],
-        publishers: [
-            '講談社', '集英社', '小学館', '新潮社', '文藝春秋',
-            '角川書店', '光文社', 'PHP研究所', '宝島社', '幻冬舎',
-            '早川書房', '東京創元社', 'ハヤカワ文庫', '創元推理文庫', '新潮文庫',
-            '角川文庫', '集英社文庫', '講談社文庫', '文春文庫', '中公文庫'
-        ]
-    }
-};
+// Function to generate dynamic reviews using Faker
+function generateReviewText(rng, region = 'en-US') {
+    // Set faker seed for deterministic results
+    faker.seed(rng());
 
-// Review templates for different languages
-const reviewTemplates = {
-    'en-US': [
-        'This book completely changed my perspective on life.',
-        'A masterpiece that will stand the test of time.',
-        'I couldn\'t put it down from start to finish.',
-        'The author has a unique voice that resonates deeply.',
-        'An emotional rollercoaster that left me breathless.',
-        'We need to navigate the redundant ASCII alarm!',
-        'You can\'t navigate the port without parsing the virtual AI card!',
-        'Andy shoes are designed to keeping in mind durability as well as trends, the most stylish range of shoes & sandals.',
-        'The characters are so well-developed and relatable.',
-        'A thought-provoking read that challenges conventional wisdom.'
-    ],
-    'de-DE': [
-        'Dieses Buch hat meine Sicht auf das Leben völlig verändert.',
-        'Ein Meisterwerk, das die Zeit überdauern wird.',
-        'Ich konnte es nicht aus der Hand legen.',
-        'Der Autor hat eine einzigartige Stimme, die tief berührt.',
-        'Eine emotionale Achterbahnfahrt, die mich atemlos zurückließ.',
-        'Die Charaktere sind so gut entwickelt und nachvollziehbar.',
-        'Ein nachdenklicher Lesestoff, der konventionelle Weisheit herausfordert.',
-        'Bene spoliatio comparo doloremque.',
-        'Argumentum uredo sollicito caelestis nemo vinculum doloremque voveo solvo.'
-    ],
-    'fr-FR': [
-        'Ce livre a complètement changé ma perspective sur la vie.',
-        'Un chef-d\'œuvre qui résistera à l\'épreuve du temps.',
-        'Je n\'ai pas pu le lâcher du début à la fin.',
-        'L\'auteur a une voix unique qui résonne profondément.',
-        'Des montagnes russes émotionnelles qui m\'ont laissé sans souffle.',
-        'Les personnages sont si bien développés et attachants.',
-        'Une lecture stimulante qui remet en question la sagesse conventionnelle.',
-        'Un voyage littéraire inoubliable.',
-        'Une œuvre qui restera gravée dans ma mémoire.'
-    ],
-    'ja-JP': [
-        'この本は私の人生観を完全に変えました。',
-        '時を超えて残る傑作です。',
-        '最初から最後まで手放せませんでした。',
-        '作者の独特な声が深く響きます。',
-        '息を呑むような感情のジェットコースターでした。',
-        'キャラクターがとても良く描かれていて親近感があります。',
-        '従来の知恵に挑戦する考えさせられる読み物です。',
-        '人生の新しい視点を与えてくれる本です。',
-        '読後感が素晴らしく、心に残る作品です。',
-        '現代社会への鋭い洞察が光る一冊です。'
-    ]
-};
+    const reviewTemplates = {
+        'en-US': [
+            () => `This book completely changed my perspective on ${faker.lorem.words({ min: 1, max: 2 })}.`,
+            () => `A masterpiece that will stand the test of time. ${faker.lorem.sentence()}`,
+            () => `I couldn't put it down from start to finish. ${faker.lorem.sentence()}`,
+            () => `The author has a unique voice that resonates deeply with ${faker.lorem.words({ min: 1, max: 2 })}.`,
+            () => `An emotional rollercoaster that left me ${faker.lorem.words({ min: 1, max: 2 })}.`,
+            () => `The characters are so well-developed and ${faker.lorem.words({ min: 1, max: 2 })}.`,
+            () => `A thought-provoking read that challenges ${faker.lorem.words({ min: 1, max: 2 })}.`,
+            () => `This book explores the ${faker.lorem.words({ min: 1, max: 2 })} in ways I never expected.`,
+            () => `A compelling narrative about ${faker.lorem.words({ min: 1, max: 2 })} that kept me engaged throughout.`,
+            () => `The author's insights into ${faker.lorem.words({ min: 1, max: 2 })} are truly remarkable.`,
+            () => `This is a book that will stay with me for ${faker.lorem.words({ min: 1, max: 2 })}.`,
+            () => `A beautifully written story about ${faker.lorem.words({ min: 1, max: 2 })} and ${faker.lorem.words({ min: 1, max: 2 })}.`,
+            () => `I found myself completely immersed in the world of ${faker.lorem.words({ min: 1, max: 2 })}.`,
+            () => `The author's treatment of ${faker.lorem.words({ min: 1, max: 2 })} is both sensitive and insightful.`,
+            () => `This book offers a fresh perspective on ${faker.lorem.words({ min: 1, max: 2 })}.`
+        ],
+        'de-DE': [
+            () => `Dieses Buch hat meine Sicht auf ${faker.lorem.words({ min: 1, max: 2 })} völlig verändert.`,
+            () => `Ein Meisterwerk, das die Zeit überdauern wird. ${faker.lorem.sentence()}`,
+            () => `Ich konnte es nicht aus der Hand legen. ${faker.lorem.sentence()}`,
+            () => `Der Autor hat eine einzigartige Stimme, die tief berührt. ${faker.lorem.sentence()}`,
+            () => `Eine emotionale Achterbahnfahrt, die mich ${faker.lorem.words({ min: 1, max: 2 })} zurückließ.`,
+            () => `Die Charaktere sind so gut entwickelt und ${faker.lorem.words({ min: 1, max: 2 })}.`,
+            () => `Ein nachdenklicher Lesestoff über ${faker.lorem.words({ min: 1, max: 2 })}.`,
+            () => `Dieses Buch erforscht ${faker.lorem.words({ min: 1, max: 2 })} auf unerwartete Weise.`,
+            () => `Eine fesselnde Erzählung über ${faker.lorem.words({ min: 1, max: 2 })}.`,
+            () => `Die Einsichten des Autors zu ${faker.lorem.words({ min: 1, max: 2 })} sind wirklich bemerkenswert.`
+        ],
+        'fr-FR': [
+            () => `Ce livre a complètement changé ma perspective sur ${faker.lorem.words({ min: 1, max: 2 })}.`,
+            () => `Un chef-d'œuvre qui résistera à l'épreuve du temps. ${faker.lorem.sentence()}`,
+            () => `Je n'ai pas pu le lâcher du début à la fin. ${faker.lorem.sentence()}`,
+            () => `L'auteur a une voix unique qui résonne profondément. ${faker.lorem.sentence()}`,
+            () => `Des montagnes russes émotionnelles qui m'ont laissé ${faker.lorem.words({ min: 1, max: 2 })}.`,
+            () => `Les personnages sont si bien développés et ${faker.lorem.words({ min: 1, max: 2 })}.`,
+            () => `Une lecture stimulante sur ${faker.lorem.words({ min: 1, max: 2 })}.`,
+            () => `Ce livre explore ${faker.lorem.words({ min: 1, max: 2 })} de manière inattendue.`,
+            () => `Un récit captivant sur ${faker.lorem.words({ min: 1, max: 2 })}.`,
+            () => `Les idées de l'auteur sur ${faker.lorem.words({ min: 1, max: 2 })} sont vraiment remarquables.`
+        ],
+        'ja-JP': [
+            () => `この本は私の${faker.lorem.words({ min: 1, max: 2 })}観を完全に変えました。`,
+            () => `時を超えて残る傑作です。${faker.lorem.sentence()}`,
+            () => `最初から最後まで手放せませんでした。${faker.lorem.sentence()}`,
+            () => `作者の独特な声が深く響きます。${faker.lorem.sentence()}`,
+            () => `息を呑むような感情のジェットコースターでした。${faker.lorem.sentence()}`,
+            () => `キャラクターがとても良く描かれていて${faker.lorem.words({ min: 1, max: 2 })}です。`,
+            () => `${faker.lorem.words({ min: 1, max: 2 })}について考えさせられる読み物です。`,
+            () => `この本は${faker.lorem.words({ min: 1, max: 2 })}を予想外の方法で探求しています。`,
+            () => `${faker.lorem.words({ min: 1, max: 2 })}についての魅力的な物語です。`,
+            () => `作者の${faker.lorem.words({ min: 1, max: 2 })}への洞察は本当に素晴らしいです。`
+        ]
+    };
+
+    const templates = reviewTemplates[region] || reviewTemplates['en-US'];
+    const template = templates[Math.floor(rng() * templates.length)];
+    return template();
+}
+
+function generateAuthorName(rng, region = 'en-US') {
+    // Set faker seed for deterministic results
+    faker.seed(rng());
+
+    const nameGenerators = {
+        'en-US': () => `${faker.person.firstName()} ${faker.person.lastName()}`,
+        'de-DE': () => `${faker.person.firstName()} ${faker.person.lastName()}`,
+        'fr-FR': () => `${faker.person.firstName()} ${faker.person.lastName()}`,
+        'ja-JP': () => `${faker.person.firstName()} ${faker.person.lastName()}`
+    };
+
+    const generator = nameGenerators[region] || nameGenerators['en-US'];
+    return generator();
+}
+
+function generatePublisherName(rng, region = 'en-US') {
+    // Set faker seed for deterministic results
+    faker.seed(rng());
+
+    const publisherGenerators = {
+        'en-US': () => `${faker.company.name()} ${faker.helpers.arrayElement(['Publishing', 'Books', 'Press', 'House', 'Group', 'Media'])}`,
+        'de-DE': () => `${faker.company.name()} ${faker.helpers.arrayElement(['Verlag', 'Bücher', 'Presse', 'Haus', 'Gruppe', 'Medien'])}`,
+        'fr-FR': () => `${faker.company.name()} ${faker.helpers.arrayElement(['Éditions', 'Livres', 'Presse', 'Maison', 'Groupe', 'Médias'])}`,
+        'ja-JP': () => `${faker.company.name()} ${faker.helpers.arrayElement(['出版', '書籍', '出版社', 'メディア', 'グループ', 'プレス'])}`
+    };
+
+    const generator = publisherGenerators[region] || publisherGenerators['en-US'];
+    return generator();
+}
+
+function generateBookTitle(rng, region = 'en-US') {
+    // Set faker seed for deterministic results
+    faker.seed(rng());
+
+    const titleTypes = {
+        'en-US': [
+            () => faker.lorem.words({ min: 2, max: 4 }),
+            () => `The ${faker.lorem.words({ min: 1, max: 3 })}`,
+            () => `${faker.lorem.words({ min: 1, max: 2 })} of ${faker.lorem.words({ min: 1, max: 2 })}`,
+            () => `${faker.lorem.words({ min: 1, max: 2 })} in ${faker.lorem.words({ min: 1, max: 2 })}`,
+            () => `${faker.lorem.words({ min: 1, max: 2 })} and ${faker.lorem.words({ min: 1, max: 2 })}`,
+            () => `${faker.lorem.words({ min: 1, max: 2 })}: ${faker.lorem.words({ min: 1, max: 2 })}`,
+            () => `${faker.lorem.words({ min: 1, max: 2 })} & ${faker.lorem.words({ min: 1, max: 2 })}`,
+            () => `${faker.lorem.words({ min: 1, max: 2 })} for ${faker.lorem.words({ min: 1, max: 2 })}`,
+            () => `${faker.lorem.words({ min: 1, max: 2 })} with ${faker.lorem.words({ min: 1, max: 2 })}`,
+            () => `${faker.lorem.words({ min: 1, max: 2 })} without ${faker.lorem.words({ min: 1, max: 2 })}`
+        ],
+        'de-DE': [
+            () => `Der ${faker.lorem.words({ min: 1, max: 2 })}`,
+            () => `Die ${faker.lorem.words({ min: 1, max: 2 })}`,
+            () => `Das ${faker.lorem.words({ min: 1, max: 2 })}`,
+            () => `${faker.lorem.words({ min: 1, max: 2 })} von ${faker.lorem.words({ min: 1, max: 2 })}`,
+            () => `${faker.lorem.words({ min: 1, max: 2 })} und ${faker.lorem.words({ min: 1, max: 2 })}`,
+            () => `${faker.lorem.words({ min: 1, max: 2 })} in ${faker.lorem.words({ min: 1, max: 2 })}`,
+            () => `${faker.lorem.words({ min: 1, max: 2 })} für ${faker.lorem.words({ min: 1, max: 2 })}`,
+            () => `${faker.lorem.words({ min: 1, max: 2 })} mit ${faker.lorem.words({ min: 1, max: 2 })}`,
+            () => `${faker.lorem.words({ min: 1, max: 2 })} ohne ${faker.lorem.words({ min: 1, max: 2 })}`,
+            () => `${faker.lorem.words({ min: 1, max: 2 })} durch ${faker.lorem.words({ min: 1, max: 2 })}`
+        ],
+        'fr-FR': [
+            () => `Le ${faker.lorem.words({ min: 1, max: 2 })}`,
+            () => `La ${faker.lorem.words({ min: 1, max: 2 })}`,
+            () => `Les ${faker.lorem.words({ min: 1, max: 2 })}`,
+            () => `${faker.lorem.words({ min: 1, max: 2 })} de ${faker.lorem.words({ min: 1, max: 2 })}`,
+            () => `${faker.lorem.words({ min: 1, max: 2 })} et ${faker.lorem.words({ min: 1, max: 2 })}`,
+            () => `${faker.lorem.words({ min: 1, max: 2 })} dans ${faker.lorem.words({ min: 1, max: 2 })}`,
+            () => `${faker.lorem.words({ min: 1, max: 2 })} pour ${faker.lorem.words({ min: 1, max: 2 })}`,
+            () => `${faker.lorem.words({ min: 1, max: 2 })} avec ${faker.lorem.words({ min: 1, max: 2 })}`,
+            () => `${faker.lorem.words({ min: 1, max: 2 })} sans ${faker.lorem.words({ min: 1, max: 2 })}`,
+            () => `${faker.lorem.words({ min: 1, max: 2 })} par ${faker.lorem.words({ min: 1, max: 2 })}`
+        ],
+        'ja-JP': [
+            () => `${faker.lorem.words({ min: 1, max: 2 })}の${faker.lorem.words({ min: 1, max: 2 })}`,
+            () => `${faker.lorem.words({ min: 1, max: 2 })}と${faker.lorem.words({ min: 1, max: 2 })}`,
+            () => `${faker.lorem.words({ min: 1, max: 2 })}：${faker.lorem.words({ min: 1, max: 2 })}`,
+            () => `${faker.lorem.words({ min: 1, max: 2 })}・${faker.lorem.words({ min: 1, max: 2 })}`,
+            () => `${faker.lorem.words({ min: 1, max: 2 })}から${faker.lorem.words({ min: 1, max: 2 })}`,
+            () => `${faker.lorem.words({ min: 1, max: 2 })}へ${faker.lorem.words({ min: 1, max: 2 })}`,
+            () => `${faker.lorem.words({ min: 1, max: 2 })}による${faker.lorem.words({ min: 1, max: 2 })}`,
+            () => `${faker.lorem.words({ min: 1, max: 2 })}について`,
+            () => `${faker.lorem.words({ min: 1, max: 2 })}として`,
+            () => `${faker.lorem.words({ min: 1, max: 2 })}としての${faker.lorem.words({ min: 1, max: 2 })}`
+        ]
+    };
+
+    const types = titleTypes[region] || titleTypes['en-US'];
+    const titleGenerator = types[Math.floor(rng() * types.length)];
+    const title = titleGenerator();
+
+    // Capitalize first letter of each word for proper title case
+    return title.split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+}
 
 function generateBooks({ page, limit, seed, region, avgLikes, avgReviews }) {
-    const rng = seedrandom(seed + page); // Combine seed with page number
+    // Combine user seed with page number to ensure different pages have different data
+    // but same seed always produces same results
+    const combinedSeed = `${seed}_${page}`;
+    const rng = seedrandom(combinedSeed);
 
     // Ensure parameters are numbers
     const avgLikesNum = parseFloat(avgLikes);
@@ -162,16 +177,13 @@ function generateBooks({ page, limit, seed, region, avgLikes, avgReviews }) {
 
     for (let i = 0; i < limit; i++) {
         const bookIndex = startIndex + i;
-        const bookSeed = seed + bookIndex; // Unique seed for each book
+        const bookSeed = `${combinedSeed}_${bookIndex}`; // Unique seed for each book
         const bookRng = seedrandom(bookSeed);
 
-        const data = languageData[region] || languageData['en-US'];
-        const reviews = reviewTemplates[region] || reviewTemplates['en-US'];
-
-        // Generate book data
-        const title = data.titles[Math.floor(bookRng() * data.titles.length)];
-        const author = data.authors[Math.floor(bookRng() * data.authors.length)];
-        const publisher = data.publishers[Math.floor(bookRng() * data.publishers.length)];
+        // Generate book data using faker
+        const title = generateBookTitle(bookRng, region);
+        const author = generateAuthorName(bookRng, region);
+        const publisher = generatePublisherName(bookRng, region);
         const year = 1990 + Math.floor(bookRng() * 34); // 1990-2023
 
         // Generate ISBN
@@ -213,9 +225,9 @@ function generateBooks({ page, limit, seed, region, avgLikes, avgReviews }) {
         const bookReviews = [];
 
         for (let j = 0; j < reviewCount; j++) {
-            const reviewText = reviews[Math.floor(bookRng() * reviews.length)];
-            const reviewerName = data.authors[Math.floor(bookRng() * data.authors.length)];
-            const reviewerCompany = data.publishers[Math.floor(bookRng() * data.publishers.length)];
+            const reviewText = generateReviewText(bookRng, region);
+            const reviewerName = generateAuthorName(bookRng, region);
+            const reviewerCompany = generatePublisherName(bookRng, region);
 
             bookReviews.push({
                 text: reviewText,
