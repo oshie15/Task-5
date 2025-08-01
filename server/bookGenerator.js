@@ -53,7 +53,7 @@ function generateAuthorName(rng, region = 'en-US') {
     // Set faker seed for deterministic results
     faker.seed(rng());
 
-    // All languages use the same name generation pattern
+    // Generate names in the specific language
     return `${faker.person.firstName()} ${faker.person.lastName()}`;
 }
 

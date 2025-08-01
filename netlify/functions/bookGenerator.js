@@ -38,12 +38,6 @@ function getLanguageConfig(region = 'en-US') {
     return LANGUAGES[region] || LANGUAGES['en-US'];
 }
 
-// Helper function to create faker instance with specific locale
-function createFakerWithLocale(region) {
-    const { faker: Faker } = require('@faker-js/faker');
-    return Faker;
-}
-
 // Function to generate dynamic reviews using Faker
 function generateReviewText(rng, region = 'en-US') {
     // Set faker seed for deterministic results
@@ -59,7 +53,7 @@ function generateAuthorName(rng, region = 'en-US') {
     // Set faker seed for deterministic results
     faker.seed(rng());
 
-    // All languages use the same name generation pattern
+    // Generate names in the specific language
     return `${faker.person.firstName()} ${faker.person.lastName()}`;
 }
 
