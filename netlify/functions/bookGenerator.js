@@ -53,8 +53,9 @@ function generateAuthorName(rng, region = 'en-US') {
 
 function generatePublisherName(rng, region = 'en-US') {
     const langConfig = getLanguageConfig(region);
-    const suffixes = langConfig.publisherSuffixes(faker);
-    const suffix = faker.helpers.arrayElement(suffixes);
+    const suffixFunctions = langConfig.publisherSuffixes(faker);
+    const suffixFunction = faker.helpers.arrayElement(suffixFunctions);
+    const suffix = suffixFunction(faker);
 
     return `${faker.company.name()} ${suffix}`;
 }
