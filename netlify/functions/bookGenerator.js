@@ -40,38 +40,55 @@ function getLanguageConfig(region = 'en-US') {
 
 // Function to generate dynamic reviews using Faker
 function generateReviewText(rng, region = 'en-US') {
-    // Create a new faker instance with the specific locale
-    const { faker: localeFaker } = require('@faker-js/faker');
-    localeFaker.setLocale(region);
-
-    return localeFaker.lorem.sentence();
+    // Generate review text based on region
+    const reviews = {
+        'en-US': ['Excellent book!', 'Highly recommended!', 'A must-read!', 'Outstanding quality!', 'Wonderful story!'],
+        'de-DE': ['Ausgezeichnetes Buch!', 'Sehr empfehlenswert!', 'Ein Muss!', 'Hervorragende Qualität!', 'Wundervolle Geschichte!'],
+        'fr-FR': ['Excellent livre!', 'Très recommandé!', 'Un must!', 'Qualité exceptionnelle!', 'Histoire merveilleuse!'],
+        'ja-JP': ['素晴らしい本です！', 'とてもおすすめです！', '必読です！', '素晴らしい品質です！', '素晴らしい物語です！']
+    };
+    
+    const regionReviews = reviews[region] || reviews['en-US'];
+    return regionReviews[Math.floor(rng() * regionReviews.length)];
 }
 
 function generateAuthorName(rng, region = 'en-US') {
-    // Create a new faker instance with the specific locale
-    const { faker: localeFaker } = require('@faker-js/faker');
-    localeFaker.setLocale(region);
-
-    return `${localeFaker.person.firstName()} ${localeFaker.person.lastName()}`;
+    // Generate names based on region
+    const names = {
+        'en-US': ['John Smith', 'Emma Johnson', 'Michael Brown', 'Sarah Davis', 'David Wilson'],
+        'de-DE': ['Hans Müller', 'Anna Schmidt', 'Klaus Weber', 'Maria Fischer', 'Peter Meyer'],
+        'fr-FR': ['Jean Dupont', 'Marie Martin', 'Pierre Durand', 'Sophie Bernard', 'Michel Petit'],
+        'ja-JP': ['田中太郎', '佐藤花子', '鈴木一郎', '高橋美咲', '渡辺健太']
+    };
+    
+    const regionNames = names[region] || names['en-US'];
+    return regionNames[Math.floor(rng() * regionNames.length)];
 }
 
 function generatePublisherName(rng, region = 'en-US') {
-    // Create a new faker instance with the specific locale
-    const { faker: localeFaker } = require('@faker-js/faker');
-    localeFaker.setLocale(region);
-
-    return `${localeFaker.company.name()} Publishing`;
+    // Generate publisher names based on region
+    const publishers = {
+        'en-US': ['Random House', 'Penguin Books', 'HarperCollins', 'Simon & Schuster', 'Macmillan'],
+        'de-DE': ['Random House', 'Penguin Verlag', 'HarperCollins', 'Simon & Schuster', 'Macmillan'],
+        'fr-FR': ['Random House', 'Penguin Livres', 'HarperCollins', 'Simon & Schuster', 'Macmillan'],
+        'ja-JP': ['ランダムハウス', 'ペンギンブックス', 'ハーパーコリンズ', 'サイモン&シュスター', 'マクミラン']
+    };
+    
+    const regionPublishers = publishers[region] || publishers['en-US'];
+    return regionPublishers[Math.floor(rng() * regionPublishers.length)];
 }
 
 function generateBookTitle(rng, region = 'en-US') {
-    // Create a new faker instance with the specific locale
-    const { faker: localeFaker } = require('@faker-js/faker');
-    localeFaker.setLocale(region);
-
-    const title = localeFaker.lorem.words({ min: 2, max: 4 });
-
-    // Capitalize first letter of each word for proper title case
-    return title.split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+    // Generate titles based on region
+    const titles = {
+        'en-US': ['The Great Adventure', 'Mystery of the Night', 'Journey to Success', 'Hidden Treasures', 'The Last Hope'],
+        'de-DE': ['Das Große Abenteuer', 'Geheimnis der Nacht', 'Reise zum Erfolg', 'Verborgene Schätze', 'Die Letzte Hoffnung'],
+        'fr-FR': ['La Grande Aventure', 'Mystère de la Nuit', 'Voyage vers le Succès', 'Trésors Cachés', 'Le Dernier Espoir'],
+        'ja-JP': ['素晴らしい冒険', '夜の謎', '成功への旅', '隠された宝物', '最後の希望']
+    };
+    
+    const regionTitles = titles[region] || titles['en-US'];
+    return regionTitles[Math.floor(rng() * regionTitles.length)];
 }
 
 function generateBooks({ page, limit, seed, region, avgLikes, avgReviews }) {
